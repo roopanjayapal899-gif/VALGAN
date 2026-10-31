@@ -97,10 +97,11 @@ signupForm.addEventListener("submit", async function (event) {
             email: email,
             password: password,
             options: {
-                data: {
-                    username: username,
-                    selected_theme: theme
-                }
+    emailRedirectTo: "https://roopanjayapal899-gif.github.io/VALGAN/login.html",
+    data: {
+        username: username,
+        selected_theme: theme
+    }
             }
         });
 
