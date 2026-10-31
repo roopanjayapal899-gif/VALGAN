@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Search | VOLGAN</title>
+
+    <link rel="stylesheet" href="search.css">
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <header class="search-header">
+
+        <a href="index.html" class="logo">
+            VOLGAN
+        </a>
+
+        <a href="profile.html" class="profile-link">
+            My Profile
+        </a>
+
+    </header>
+
+
+    <!-- MAIN SEARCH -->
+    <main class="search-container">
+
+        <section class="search-heading">
+
+            <h1>Discover 🔍</h1>
+
+            <p>Find people and explore posts.</p>
+
+        </section>
+
+
+        <!-- SEARCH TABS -->
+        <section class="search-tabs">
+
+            <button
+                type="button"
+                class="search-tab active"
+                id="peopleTab">
+
+                👥 People
+
+            </button>
+
+            <button
+                type="button"
+                class="search-tab"
+                id="postsTab">
+
+                📝 Posts
+
+            </button>
+
+        </section>
+
+
+        <!-- PEOPLE SEARCH -->
+        <section id="peopleSearchSection">
+
+            <div class="search-box">
+
+                <input
+                    type="search"
+                    id="peopleSearchInput"
+                    placeholder="Search username..."
+                    autocomplete="off"
+                >
+
+                <button
+                    type="button"
+                    id="peopleSearchButton">
+
+                    🔍
+
+                </button>
+
+            </div>
+
+            <div id="peopleResults">
+
+                <p>Search for people on VOLGAN.</p>
+
+            </div>
+
+        </section>
+
+
+        <!-- POST SEARCH -->
+        <section id="postsSearchSection" hidden>
+
+            <div class="search-box">
+
+                <input
+                    type="search"
+                    id="postsSearchInput"
+                    placeholder="Search posts..."
+                    autocomplete="off"
+                >
+
+                <button
+                    type="button"
+                    id="postsSearchButton">
+
+                    🔍
+
+                </button>
+
+            </div>
+
+            <div id="postsResults">
+
+                <p>Discover interesting posts.</p>
+
+            </div>
+
+        </section>
+
+
+        <p id="searchMessage" role="status"></p>
+
+    </main>
+
+
+    <!-- BOTTOM NAVIGATION -->
+    <nav class="bottom-nav">
+
+        <a href="index.html">🏠<span>Home</span></a>
+
+        <a href="friends.html">♧<span>Friends</span></a>
+
+        <a href="create-post.html">＋<span>Create</span></a>
+
+        <a href="search.html" class="active">🔍<span>Search</span></a>
+
+        <a href="profile.html">○<span>Profile</span></a>
+
+    </nav>
+
+
+    <!-- SCRIPTS -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script src="supabase.js"></script>
+
+    <script src="search.js" defer></script>
+
+</body>
+
+</html>

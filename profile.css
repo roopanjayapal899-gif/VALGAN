@@ -1,0 +1,366 @@
+/* ==========================
+   VOLGAN PROFILE PAGE
+   ========================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f0f4f8;
+    color: #172b4d;
+}
+
+/* Header */
+
+.top-header {
+    background: linear-gradient(135deg, #071b33, #087e8b);
+    color: white;
+    padding: 16px 5%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.12);
+}
+
+.logo {
+    font-size: 26px;
+    font-weight: 800;
+    letter-spacing: 3px;
+}
+
+#logoutButton {
+    padding: 9px 17px;
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    border-radius: 8px;
+    background: transparent;
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#logoutButton:hover {
+    background: white;
+    color: #075985;
+}
+
+/* Main Container */
+
+.profile-container {
+    width: 100%;
+    max-width: 850px;
+    margin: 30px auto;
+    padding: 0 16px;
+}
+
+/* Profile Card */
+
+.profile-card {
+    background: white;
+    border-radius: 18px;
+    padding: 30px 20px;
+    text-align: center;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.06);
+}
+
+/* Avatar */
+
+.profile-avatar {
+    width: 100px;
+    height: 100px;
+    margin: 0 auto 16px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #d8f3f5, #b7e4f5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 48px;
+    border: 4px solid #ffffff;
+    box-shadow: 0 0 0 2px #087e8b;
+}
+
+/* Profile Details */
+
+.profile-card h2 {
+    font-size: 24px;
+    margin-bottom: 8px;
+    overflow-wrap: anywhere;
+}
+
+#profileUsername {
+    color: #087e8b;
+    font-size: 14px;
+    margin-bottom: 12px;
+    overflow-wrap: anywhere;
+}
+
+
+
+#profileTheme {
+    display: inline-block;
+    background: #e1f5f5;
+    color: #087e8b;
+    padding: 7px 13px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+    margin-bottom: 12px;
+}
+
+#profileEmail {
+    color: #6b7280;
+    font-size: 13px;
+    overflow-wrap: anywhere;
+}
+
+/* Statistics */
+
+.profile-stats {
+    display: flex;
+    justify-content: center;
+    gap: 35px;
+    margin: 25px 0;
+}
+
+.profile-stats div {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.profile-stats strong {
+    font-size: 21px;
+    color: #075985;
+}
+
+.profile-stats span {
+    font-size: 12px;
+    color: #6b7280;
+}
+
+/* Edit Profile */
+
+#editProfileButton {
+    padding: 11px 25px;
+    border: none;
+    border-radius: 9px;
+    background: #087e8b;
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#editProfileButton:hover {
+    background: #075985;
+}
+
+/* Navigation */
+
+.profile-navigation {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    margin: 22px 0;
+}
+
+.profile-navigation a {
+    display: block;
+    background: white;
+    padding: 17px 10px;
+    border-radius: 12px;
+    text-align: center;
+    text-decoration: none;
+    color: #172b4d;
+    font-size: 14px;
+    font-weight: bold;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.04);
+    transition: transform 0.2s, background 0.2s;
+}
+
+.profile-navigation a:hover {
+    background: #e1f5f5;
+    transform: translateY(-2px);
+}
+
+/* Posts */
+
+.posts-section {
+    background: white;
+    padding: 22px;
+    border-radius: 15px;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.04);
+}
+
+.posts-section h2 {
+    font-size: 20px;
+    margin-bottom: 18px;
+}
+
+#postsContainer {
+    color: #6b7280;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+#profileMessage {
+    text-align: center;
+    margin: 18px 0;
+    font-size: 14px;
+    overflow-wrap: anywhere;
+}
+
+/* Mobile Responsive */
+
+@media (max-width: 400px) {
+    .logo {
+        font-size: 22px;
+    }
+
+    .profile-stats {
+        gap: 24px;
+    }
+
+    .profile-navigation a {
+        font-size: 12px;
+        padding: 15px 6px;
+    }
+}
+
+.profile-avatar-container {
+display: flex;
+flex-direction: column;
+align-items: center;
+gap: 10px;
+margin-bottom: 20px;
+}
+
+.profile-avatar {
+width: 120px;
+height: 120px;
+border-radius: 50%;
+object-fit: cover;
+background: #e5e7eb;
+border: 3px solid #2563eb;
+}
+
+.change-photo-button {
+display: inline-block;
+padding: 10px 16px;
+border-radius: 8px;
+background: #2563eb;
+color: white;
+cursor: pointer;
+font-size: 14px;
+}
+
+.change-photo-button:hover {
+background: #1d4ed8;
+}
+
+#profileImageMessage {
+text-align: center;
+font-size: 14px;
+}
+
+#editProfileForm {
+margin-top: 20px;
+text-align: left;
+}
+
+#editProfileForm[hidden] {
+display: none;
+}
+
+#editProfileForm label {
+display: block;
+margin: 12px 0 6px;
+font-weight: bold;
+}
+
+#editProfileForm input,
+#editProfileForm textarea {
+width: 100%;
+box-sizing: border-box;
+padding: 12px;
+border: 1px solid #ccc;
+border-radius: 8px;
+font-size: 16px;
+font-family: inherit;
+}
+
+.edit-profile-actions {
+display: flex;
+gap: 10px;
+margin-top: 16px;
+}
+
+.edit-profile-actions button {
+flex: 1;
+padding: 12px 8px;
+border: none;
+border-radius: 8px;
+background: #2563eb;
+color: white;
+cursor: pointer;
+}
+
+.edit-profile-actions button[type="button"] {
+background: #666;
+}
+
+#editProfileButton {
+margin-top: 12px;
+padding: 12px 20px;
+border: none;
+border-radius: 8px;
+background: #2563eb;
+color: white;
+cursor: pointer;
+}
+
+/* My Posts */
+
+#postsContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 16px;
+}
+
+.my-post-card {
+    padding: 16px;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    background: #ffffff;
+    overflow: hidden;
+}
+
+.my-post-content {
+    margin: 0 0 12px;
+    color: #222222;
+    font-size: 16px;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+    white-space: pre-wrap;
+}
+
+.my-post-image {
+    display: block;
+    width: 100%;
+    max-height: 450px;
+    object-fit: contain;
+    border-radius: 8px;
+    background: #f2f2f2;
+}
+
+.my-post-date {
+    display: block;
+    margin-top: 12px;
+    color: #777777;
+    font-size: 12px;
+}

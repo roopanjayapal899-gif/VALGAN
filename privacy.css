@@ -1,0 +1,147 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f5f6fa;
+    color: #222;
+}
+
+.privacy-header {
+    background: white;
+    padding: 18px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    border-bottom: 1px solid #eee;
+}
+
+.privacy-header a {
+    text-decoration: none;
+    color: #222;
+    font-size: 27px;
+}
+
+.privacy-header h2 {
+    font-size: 19px;
+}
+
+.privacy-container {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 0 15px 30px;
+}
+
+.privacy-intro {
+    padding: 20px;
+    background: #222;
+    color: white;
+    border-radius: 12px;
+    margin-bottom: 25px;
+}
+
+.privacy-intro h2 {
+    font-size: 20px;
+    margin-bottom: 8px;
+}
+
+.privacy-intro p {
+    color: #ddd;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.privacy-section {
+    margin-bottom: 25px;
+}
+
+.privacy-section h3 {
+    font-size: 15px;
+    color: #777;
+    margin: 0 0 10px 5px;
+}
+
+.privacy-item {
+    background: white;
+    padding: 17px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.privacy-item:first-of-type {
+    border-radius: 10px 10px 0 0;
+}
+
+.privacy-item:last-child {
+    border-radius: 0 0 10px 10px;
+}
+
+.privacy-item strong {
+    display: block;
+    font-size: 14px;
+}
+
+.privacy-item small {
+    display: block;
+    color: #888;
+    font-size: 11px;
+    margin-top: 6px;
+    line-height: 1.4;
+}
+
+.privacy-item input[type="checkbox"] {
+    width: 21px;
+    height: 21px;
+    accent-color: #222;
+    flex-shrink: 0;
+}
+
+.privacy-item select {
+    max-width: 125px;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background: white;
+}
+
+.privacy-link {
+    display: flex;
+    justify-content: space-between;
+    padding: 17px;
+    background: white;
+    border-bottom: 1px solid #eee;
+    text-decoration: none;
+    color: #222;
+    font-size: 14px;
+}
+
+.privacy-link:first-of-type {
+    border-radius: 10px 10px 0 0;
+}
+
+.privacy-link:last-child {
+    border-radius: 0 0 10px 10px;
+}
+
+#savePrivacy {
+    width: 100%;
+    padding: 15px;
+    background: #222;
+    color: white;
+    border: none;
+    border-radius: 9px;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+#privacyMessage {
+    text-align: center;
+    margin-top: 15px;
+    font-size: 13px;
+}

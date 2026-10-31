@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Create Post | VOLGAN</title>
+
+    <link rel="stylesheet" href="./create-post.css">
+</head>
+
+<body>
+
+    <header class="header">
+        <a href="index.html" class="logo">VOLGAN</a>
+        <a href="index.html" class="back-link">← Home</a>
+    </header>
+
+    <main class="container">
+
+        <section class="post-card">
+
+            <h1>Create a Post</h1>
+
+            <p class="subtitle">
+                Share what's happening in your world.
+            </p>
+
+            <form id="createPostForm">
+
+                <label for="postContent">What's on your mind?</label>
+
+                <textarea
+                    id="postContent"
+                    maxlength="2000"
+                    placeholder="Write something..."
+                ></textarea>
+
+                <div class="character-count">
+                    <span id="characterCount">0</span>/2000
+                </div>
+
+                <div class="image-upload-section">
+
+                    <label for="postImage">📷 Add Photo</label>
+
+                    <input
+                        type="file"
+                        id="postImage"
+                        accept="image/jpeg,image/png,image/webp"
+                    >
+
+                    <p class="help-text">
+                        JPG, PNG or WebP · Maximum original size 10 MB
+                    </p>
+
+                    <div id="imagePreviewContainer" hidden>
+
+                        <img
+                            id="imagePreview"
+                            alt="Selected image preview"
+                        >
+
+                        <p id="imageInfo"></p>
+
+                        <button
+                            type="button"
+                            id="removeImage"
+                            class="remove-button"
+                        >
+                            Remove Image
+                        </button>
+
+                    </div>
+
+                </div>
+
+                <div class="preview-section">
+
+                    <h2>Post Preview</h2>
+
+                    <div class="preview-card">
+
+                        <div class="preview-header">
+                            <div class="preview-avatar" id="previewAvatar">
+                                V
+                            </div>
+
+                            <div>
+                                <strong id="previewUsername">
+                                    VOLGAN User
+                                </strong>
+
+                                <p>Just now · Public</p>
+                            </div>
+                        </div>
+
+                        <p id="postPreview" class="post-preview">
+                            Your post will appear here.
+                        </p>
+
+                        <img
+                            id="previewPostImage"
+                            class="preview-post-image"
+                            alt="Post image preview"
+                            hidden
+                        >
+
+                    </div>
+
+                </div>
+
+                <button
+                    type="submit"
+                    id="publishButton"
+                >
+                    Publish Post
+                </button>
+
+                <p id="postMessage" role="status" aria-live="polite"></p>
+
+            </form>
+
+        </section>
+
+    </main>
+
+    <nav class="bottom-navigation">
+
+        <a href="index.html">
+            <span>⌂</span>
+            <small>Home</small>
+        </a>
+
+        <a href="friends.html">
+            <span>♧</span>
+            <small>Friends</small>
+        </a>
+
+        <a href="create-post.html" class="active">
+            <span>＋</span>
+            <small>Create</small>
+        </a>
+
+        <a href="messages.html">
+            <span>✉</span>
+            <small>Messages</small>
+        </a>
+
+        <a href="profile.html">
+            <span>○</span>
+            <small>Profile</small>
+        </a>
+
+    </nav>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="./supabase.js"></script>
+    <script src="./create-post.js" defer></script>
+
+</body>
+</html>

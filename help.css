@@ -1,0 +1,163 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f4f6f9;
+    color: #222;
+}
+
+.help-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 16px 20px;
+    background: #fff;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.help-header a {
+    text-decoration: none;
+    color: #222;
+    font-size: 25px;
+}
+
+.help-header h2 {
+    font-size: 20px;
+}
+
+.help-container {
+    width: 92%;
+    max-width: 700px;
+    margin: 30px auto;
+}
+
+.help-welcome {
+    background: #2563eb;
+    color: #fff;
+    padding: 30px 22px;
+    border-radius: 14px;
+    margin-bottom: 22px;
+}
+
+.help-welcome h2 {
+    font-size: 23px;
+    margin-bottom: 10px;
+}
+
+.help-welcome p {
+    font-size: 14px;
+    line-height: 1.6;
+    opacity: 0.9;
+}
+
+.help-search {
+    margin-bottom: 30px;
+}
+
+.help-search input {
+    width: 100%;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    font-size: 15px;
+    outline: none;
+}
+
+.help-search input:focus {
+    border-color: #2563eb;
+}
+
+.help-section h3 {
+    font-size: 19px;
+    margin-bottom: 16px;
+}
+
+.faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.faq-item {
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid #eee;
+}
+
+.faq-question {
+    width: 100%;
+    padding: 17px;
+    border: none;
+    background: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-align: left;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    color: #222;
+}
+
+.faq-question span {
+    font-size: 22px;
+    color: #2563eb;
+}
+
+.faq-answer {
+    display: none;
+    padding: 0 17px 17px;
+    color: #666;
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+.faq-item.active .faq-answer {
+    display: block;
+}
+
+.contact-support {
+    background: #fff;
+    padding: 24px;
+    margin-top: 30px;
+    border-radius: 12px;
+    text-align: center;
+}
+
+.contact-support h3 {
+    font-size: 19px;
+    margin-bottom: 10px;
+}
+
+.contact-support p {
+    color: #777;
+    font-size: 14px;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+.contact-support a {
+    display: inline-block;
+    background: #2563eb;
+    color: #fff;
+    padding: 12px 22px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+@media (max-width: 480px) {
+    .help-container {
+        margin-top: 20px;
+    }
+
+    .help-welcome h2 {
+        font-size: 20px;
+    }
+}

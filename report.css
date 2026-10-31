@@ -1,0 +1,124 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f4f6f9;
+    color: #222;
+}
+
+.report-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 16px 20px;
+    background: #fff;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.report-header a {
+    text-decoration: none;
+    color: #222;
+    font-size: 25px;
+}
+
+.report-header h2 {
+    font-size: 20px;
+}
+
+.report-container {
+    width: 92%;
+    max-width: 600px;
+    margin: 30px auto;
+}
+
+.report-intro {
+    background: #2563eb;
+    color: #fff;
+    padding: 25px;
+    border-radius: 13px;
+    margin-bottom: 25px;
+}
+
+.report-intro h2 {
+    font-size: 22px;
+    margin-bottom: 10px;
+}
+
+.report-intro p {
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+#reportForm {
+    background: #fff;
+    padding: 24px;
+    border-radius: 13px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+}
+
+#reportForm label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    margin: 18px 0 9px;
+}
+
+#reportForm select,
+#reportForm textarea,
+#reportForm input {
+    width: 100%;
+    padding: 13px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: inherit;
+    outline: none;
+}
+
+#reportForm select:focus,
+#reportForm textarea:focus,
+#reportForm input:focus {
+    border-color: #2563eb;
+}
+
+#reportForm textarea {
+    resize: vertical;
+    line-height: 1.6;
+}
+
+#reportForm button {
+    width: 100%;
+    padding: 14px;
+    margin-top: 22px;
+    border: none;
+    border-radius: 8px;
+    background: #2563eb;
+    color: #fff;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+#reportForm button:hover {
+    background: #1d4ed8;
+}
+
+#reportMessage {
+    margin-top: 15px;
+    text-align: center;
+    font-size: 14px;
+}
+
+@media (max-width: 480px) {
+    .report-container {
+        margin-top: 20px;
+    }
+
+    #reportForm {
+        padding: 18px;
+    }
+}

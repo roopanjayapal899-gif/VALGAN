@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>VOLGAN — Home</title>
+
+    <link rel="stylesheet" href="index.css">
+</head>
+
+<body>
+
+<!-- HEADER -->
+<header class="header">
+
+    <a href="index.html" class="logo">VOLGAN</a>
+
+    <a href="search.html" class="header-search" aria-label="Search">
+        🔍
+    </a>
+
+</header>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-container">
+
+        <!-- WELCOME -->
+        <section class="welcome-card">
+
+            <p class="welcome-label">WELCOME TO VOLGAN</p>
+
+            <h1 id="welcomeMessage">
+                Your world. Your current.
+            </h1>
+
+            <p class="welcome-description">
+                Connect with people. Share your world.
+            </p>
+
+            <p id="userTheme" class="theme-badge">
+                Your community, your theme.
+            </p>
+
+        </section>
+
+        <!-- CREATE POST -->
+        <section class="create-post-card">
+
+            <div class="create-post-top">
+
+                <div class="avatar" id="userAvatar">👤</div>
+
+                <button
+                    id="createPostButton"
+                    class="post-prompt"
+                    type="button">
+                    What's happening in your world?
+                </button>
+
+            </div>
+
+            <div class="create-post-actions">
+
+                <button
+                    id="textPostButton"
+                    type="button">
+                    ＋ Create a Post
+                </button>
+
+            </div>
+
+        </section>
+
+        <!-- FEED -->
+        <section class="feed-section">
+
+            <div class="feed-heading">
+                <h2>Your Feed</h2>
+
+                <select id="feedFilter" aria-label="Feed filter">
+                    <option value="all">All Posts</option>
+                    <option value="latest">Latest</option>
+                </select>
+            </div>
+
+            <div id="feedContainer">
+
+                <div class="empty-feed">
+
+                    <div class="empty-icon">🌊</div>
+
+                    <h3>Your VOLGAN journey starts here!</h3>
+
+                    <p>
+                        Posts from your community will appear here.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- BOTTOM NAVIGATION -->
+    <nav class="bottom-navigation">
+
+        <a href="index.html" class="active">
+            <span>⌂</span>
+            <small>Home</small>
+        </a>
+
+        <a href="friends.html">
+            <span>♧</span>
+            <small>Friends</small>
+        </a>
+
+        <a href="create-post.html" class="create-button">
+            <span>＋</span>
+            <small>Create</small>
+        </a>
+
+        <a href="messages.html">
+            <span>✉</span>
+            <small>Messages</small>
+        </a>
+
+        <a href="profile.html">
+            <span>○</span>
+            <small>Profile</small>
+        </a>
+
+    </nav>
+
+    <!-- SCRIPTS -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase.js"></script>
+    <script src="index.js" defer></script>
+
+</body>
+</html>

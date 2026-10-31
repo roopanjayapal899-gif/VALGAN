@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Privacy | VOLGAN</title>
+    <link rel="stylesheet" href="privacy.css">
+</head>
+<body>
+
+<header class="privacy-header">
+    <a href="blocked-users.html">←</a>
+    <h2>Privacy & Security</h2>
+</header>
+
+<main class="privacy-container">
+
+    <section class="privacy-intro">
+        <h2>Your Privacy Matters</h2>
+        <p>Control how people interact with you on VOLGAN.</p>
+    </section>
+
+    <section class="privacy-section">
+        <h3>Account Privacy</h3>
+
+        <div class="privacy-item">
+            <div>
+                <strong>Private Account</strong>
+                <small>Only approved friends can see your posts.</small>
+            </div>
+            <input type="checkbox" id="privateAccount">
+        </div>
+    </section>
+
+    <section class="privacy-section">
+        <h3>Post Visibility</h3>
+
+        <div class="privacy-item">
+            <div>
+                <strong>Who can see my posts?</strong>
+                <small>Choose your post audience.</small>
+            </div>
+            <select id="postVisibility">
+                <option value="public">Everyone</option>
+                <option value="friends">Friends only</option>
+            </select>
+        </div>
+    </section>
+
+    <section class="privacy-section">
+        <h3>Interaction</h3>
+
+        <div class="privacy-item">
+            <div>
+                <strong>Friend Requests</strong>
+                <small>Allow people to send friend requests.</small>
+            </div>
+            <input type="checkbox" id="allowRequests" checked>
+        </div>
+
+        <div class="privacy-item">
+            <div>
+                <strong>Show Online Status</strong>
+                <small>Let friends see when you are online.</small>
+            </div>
+            <input type="checkbox" id="onlineStatus" checked>
+        </div>
+
+        <div class="privacy-item">
+            <div>
+                <strong>Show Last Active</strong>
+                <small>Display your last active time.</small>
+            </div>
+            <input type="checkbox" id="lastActive" checked>
+        </div>
+    </section>
+
+    <section class="privacy-section">
+        <h3>Location Privacy</h3>
+
+        <div class="privacy-item">
+            <div>
+                <strong>Share Location</strong>
+                <small>Allow location visibility to friends.</small>
+            </div>
+            <input type="checkbox" id="shareLocation">
+        </div>
+    </section>
+
+    <section class="privacy-section">
+        <h3>Security</h3>
+
+        <a href="settings.html" class="privacy-link">
+            🔒 Account Security
+            <span>›</span>
+        </a>
+
+        <a href="settings.html" class="privacy-link">
+            🚫 Manage Blocked Users
+            <span>›</span>
+        </a>
+    </section>
+
+    <button id="savePrivacy">Save Settings</button>
+
+    <p id="privacyMessage"></p>
+
+</main>
+
+<script src="privacy.js" defer></script>
+
+</body>
+</html>

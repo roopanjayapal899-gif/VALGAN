@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Profile | VOLGAN</title>
+
+    <link rel="stylesheet" href="view-profile.css">
+</head>
+
+<body>
+
+    <header class="profile-header">
+        <a href="search.html">← Back</a>
+        <h2>VOLGAN</h2>
+    </header>
+
+    <main class="public-profile">
+
+        <section class="profile-card">
+
+            <img
+                id="publicAvatar"
+                src=""
+                alt="Profile Photo"
+            >
+
+            <h2 id="publicName">Loading...</h2>
+
+            <p id="publicUsername"></p>
+
+            <p id="publicBio"></p>
+
+            <div class="profile-actions">
+
+                <button id="friendButton" type="button">
+                    Add Friend
+                </button>
+
+                <button id="blockButton" type="button">
+                    Block
+                </button>
+
+            </div>
+
+        </section>
+
+        <section class="public-posts">
+
+            <h3>Posts</h3>
+
+            <div id="publicPosts">
+                Loading posts...
+            </div>
+
+        </section>
+
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase.js"></script>
+    <script src="view-profile.js" defer></script>
+
+</body>
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Messages | VOLGAN</title>
+    <link rel="stylesheet" href="messages.css">
+</head>
+<body>
+
+<header class="chat-header">
+    <a href="index.html" class="logo">VOLGAN</a>
+    <h2>Messages</h2>
+</header>
+
+<main class="chat-container">
+
+    <section id="chatListSection">
+
+        <div class="chat-search">
+            <input
+                type="search"
+                id="chatSearch"
+                placeholder="Search conversations..."
+            >
+        </div>
+
+        <div id="chatList"></div>
+
+    </section>
+
+    <section id="chatWindow" hidden>
+
+        <div class="conversation-header">
+            <button id="backButton">←</button>
+
+            <div>
+                <h3 id="chatUsername">User</h3>
+                <small id="chatStatus">Offline</small>
+            </div>
+        </div>
+
+        <div id="messageList" class="message-list"></div>
+
+        <form id="messageForm">
+            <input
+                type="text"
+                id="messageInput"
+                placeholder="Write a message..."
+                autocomplete="off"
+                required
+            >
+
+            <button type="submit">Send</button>
+        </form>
+
+    </section>
+
+</main>
+
+<nav class="bottom-nav">
+    <a href="index.html">⌂<span>Home</span></a>
+    <a href="friends.html">♧<span>Friends</span></a>
+    <a href="create-post.html">＋<span>Create</span></a>
+    <a href="search.html">⌕<span>Search</span></a>
+    <a href="profile.html">◉<span>Profile</span></a>
+</nav>
+
+<script src="messages.js" defer></script>
+
+</body>
+</html>

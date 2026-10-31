@@ -1,0 +1,203 @@
+/* ===== GENERAL RESET ===== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #eaf4ff, #f5f8fc);
+    color: #203047;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+/* ===== SIGNUP CONTAINER ===== */
+
+.container {
+    width: 100%;
+    max-width: 430px;
+    background: #ffffff;
+    padding: 30px 25px;
+    border-radius: 18px;
+    box-shadow: 0 8px 30px rgba(30, 60, 90, 0.12);
+}
+
+/* ===== LOGO ===== */
+
+.logo {
+    text-align: center;
+    font-size: 34px;
+    font-weight: bold;
+    letter-spacing: 3px;
+    color: #1769aa;
+    margin-bottom: 5px;
+}
+
+.tagline {
+    text-align: center;
+    color: #718096;
+    font-size: 13px;
+    margin-bottom: 25px;
+}
+
+/* ===== HEADINGS ===== */
+
+h2 {
+    text-align: center;
+    margin-bottom: 8px;
+    font-size: 23px;
+}
+
+.subtitle {
+    text-align: center;
+    font-size: 14px;
+    color: #718096;
+    margin-bottom: 25px;
+}
+
+/* ===== FORM GROUPS ===== */
+
+.form-group {
+    margin-bottom: 17px;
+}
+
+.form-group > label {
+    display: block;
+    margin-bottom: 7px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+/* ===== INPUTS ===== */
+
+input:not([type="radio"]):not([type="checkbox"]) {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #d5deea;
+    border-radius: 9px;
+    font-size: 15px;
+    background: #ffffff;
+    outline: none;
+}
+
+input:focus {
+    border-color: #1769aa;
+    box-shadow: 0 0 0 2px rgba(23, 105, 170, 0.1);
+}
+
+/* ===== THEME OPTIONS ===== */
+
+.theme-option {
+    border: 1px solid #d5deea;
+    border-radius: 10px;
+    padding: 12px;
+    margin-bottom: 9px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.theme-option input {
+    width: auto;
+    accent-color: #1769aa;
+    flex-shrink: 0;
+}
+
+.theme-option span {
+    font-size: 14px;
+}
+
+.theme-option:has(input:checked) {
+    border-color: #1769aa;
+    background: #f0f7ff;
+}
+
+/* ===== TERMS & CONDITIONS ===== */
+
+.terms {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 12px;
+    line-height: 1.5;
+    margin: 18px 0;
+    color: #526174;
+    cursor: pointer;
+}
+
+.terms input {
+    width: auto;
+    margin-top: 2px;
+    flex-shrink: 0;
+}
+
+/* ===== SIGNUP BUTTON ===== */
+
+button {
+    width: 100%;
+    padding: 13px;
+    border: none;
+    border-radius: 9px;
+    background: #1769aa;
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+button:hover {
+    background: #10558c;
+}
+
+button:active {
+    transform: scale(0.99);
+}
+
+/* ===== MESSAGE ===== */
+
+.message {
+    margin-top: 15px;
+    font-size: 14px;
+    text-align: center;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+
+/* ===== LOGIN LINK ===== */
+
+.login-link {
+    text-align: center;
+    font-size: 14px;
+    margin-top: 20px;
+    color: #65748a;
+}
+
+.login-link a {
+    color: #1769aa;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.login-link a:hover {
+    text-decoration: underline;
+}
+
+/* ===== MOBILE RESPONSIVE ===== */
+
+@media (max-width: 380px) {
+    .container {
+        padding: 25px 18px;
+    }
+
+    .logo {
+        font-size: 29px;
+    }
+}

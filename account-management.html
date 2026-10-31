@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Management | VOLGAN</title>
+    <link rel="stylesheet" href="account-management.css">
+</head>
+<body>
+
+<header class="account-header">
+    <a href="settings.html">←</a>
+    <h2>Account Management</h2>
+</header>
+
+<main class="account-container">
+
+    <section class="account-info">
+        <h2>Manage Your Account</h2>
+        <p>Choose what you want to do with your VOLGAN account.</p>
+    </section>
+
+    <section class="account-option">
+        <div class="option-icon">⏸️</div>
+        <h3>Deactivate Account</h3>
+        <p>
+            Temporarily deactivate your account.
+            You can return whenever you are ready.
+        </p>
+        <button type="button" id="deactivateBtn">
+            Deactivate Account
+        </button>
+    </section>
+
+    <section class="account-option delete-option">
+        <div class="option-icon">🗑️</div>
+        <h3>Delete Account</h3>
+        <p>
+            Request permanent deletion of your account
+            and associated information.
+        </p>
+        <button type="button" id="deleteBtn">
+            Delete Account
+        </button>
+    </section>
+
+    <div id="accountMessage"></div>
+
+</main>
+
+<script src="account-management.js" defer></script>
+
+</body>
+</html>

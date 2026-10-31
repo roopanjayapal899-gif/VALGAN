@@ -1,0 +1,116 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f4f6f9;
+    color: #222;
+}
+
+.account-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 16px 20px;
+    background: #fff;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.account-header a {
+    text-decoration: none;
+    color: #222;
+    font-size: 25px;
+}
+
+.account-header h2 {
+    font-size: 20px;
+}
+
+.account-container {
+    width: 92%;
+    max-width: 600px;
+    margin: 30px auto;
+}
+
+.account-info {
+    background: #2563eb;
+    color: #fff;
+    padding: 25px;
+    border-radius: 13px;
+    margin-bottom: 22px;
+}
+
+.account-info h2 {
+    font-size: 22px;
+    margin-bottom: 10px;
+}
+
+.account-info p {
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.account-option {
+    background: #fff;
+    padding: 25px;
+    border-radius: 12px;
+    margin-bottom: 18px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.option-icon {
+    font-size: 30px;
+    margin-bottom: 15px;
+}
+
+.account-option h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.account-option p {
+    color: #777;
+    font-size: 14px;
+    line-height: 1.7;
+    margin-bottom: 20px;
+}
+
+.account-option button {
+    width: 100%;
+    padding: 13px;
+    border: none;
+    border-radius: 8px;
+    background: #2563eb;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.account-option button:hover {
+    opacity: 0.9;
+}
+
+.delete-option button {
+    background: #dc2626;
+}
+
+#accountMessage {
+    text-align: center;
+    font-size: 14px;
+    margin-top: 15px;
+    line-height: 1.6;
+}
+
+@media (max-width: 480px) {
+    .account-container {
+        margin-top: 20px;
+    }
+
+    .account-option {
+        padding: 20px;
+    }
+}

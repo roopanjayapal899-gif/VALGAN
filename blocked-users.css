@@ -1,0 +1,136 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f5f6fa;
+    color: #222;
+}
+
+.blocked-header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 18px;
+    background: white;
+    border-bottom: 1px solid #eee;
+}
+
+.blocked-header a {
+    text-decoration: none;
+    color: #222;
+    font-size: 27px;
+}
+
+.blocked-header h2 {
+    font-size: 19px;
+}
+
+.blocked-container {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 0 15px 30px;
+}
+
+.blocked-intro {
+    background: #222;
+    color: white;
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+}
+
+.blocked-intro h2 {
+    font-size: 19px;
+    margin-bottom: 8px;
+}
+
+.blocked-intro p {
+    font-size: 13px;
+    line-height: 1.5;
+    color: #ddd;
+}
+
+.blocked-search input {
+    width: 100%;
+    padding: 13px;
+    border: 1px solid #ddd;
+    border-radius: 9px;
+    font-size: 14px;
+    background: white;
+}
+
+#blockedCount {
+    color: #777;
+    font-size: 13px;
+    margin: 18px 3px 12px;
+}
+
+.blocked-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 15px;
+    background: white;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.blocked-avatar {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background: #eee;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 22px;
+}
+
+.blocked-details {
+    flex: 1;
+    min-width: 0;
+}
+
+.blocked-details h3 {
+    font-size: 14px;
+}
+
+.blocked-details p {
+    color: #888;
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+.unblock-button {
+    background: white;
+    color: #222;
+    border: 1px solid #ccc;
+    border-radius: 7px;
+    padding: 9px 12px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.empty-blocked {
+    background: white;
+    padding: 45px 15px;
+    border-radius: 10px;
+    text-align: center;
+    color: #888;
+    font-size: 14px;
+}
+
+@media (max-width: 350px) {
+    .blocked-card {
+        gap: 8px;
+        padding: 10px;
+    }
+
+    .unblock-button {
+        padding: 8px;
+    }
+}

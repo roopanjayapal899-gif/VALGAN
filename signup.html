@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>VOLGAN - Create Account</title>
+
+    <link rel="stylesheet" href="signup.css">
+</head>
+
+
+
+    <main class="container">
+
+        <header>
+            <div class="logo">VOLGAN</div>
+            <p class="tagline">One World. Many Currents.</p>
+        </header>
+
+        <h2>Create Account</h2>
+
+        <p class="subtitle">
+            Join VOLGAN and find your flow.
+        </p>
+
+        <form id="signupForm">
+
+            <!-- Username -->
+            <div class="form-group">
+                <label for="username">Username</label>
+
+                <input
+                    type="text"
+                    id="username"
+                    name="username"
+                    placeholder="Choose a username"
+                    minlength="3"
+                    maxlength="20"
+                    pattern="[A-Za-z0-9_]+"
+                    autocomplete="username"
+                    required
+                >
+            </div>
+
+            <!-- Email -->
+            <div class="form-group">
+                <label for="email">Email Address</label>
+
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="Enter your email"
+                    autocomplete="email"
+                    required
+                >
+            </div>
+
+            <!-- Password -->
+            <div class="form-group">
+                <label for="password">Password</label>
+
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    placeholder="At least 8 characters"
+                    minlength="8"
+                    autocomplete="new-password"
+                    required
+                >
+            </div>
+
+            <!-- Confirm Password -->
+            <div class="form-group">
+                <label for="confirmPassword">Confirm Password</label>
+
+                <input
+                    type="password"
+                    id="confirmPassword"
+                    name="confirmPassword"
+                    placeholder="Enter password again"
+                    minlength="8"
+                    autocomplete="new-password"
+                    required
+                >
+            </div>
+
+            <!-- Theme Selection -->
+            <div class="form-group">
+
+                <label>Choose Your Theme</label>
+
+                <label class="theme-option">
+                    <input
+                        type="radio"
+                        name="theme"
+                        value="HIMALAYA"
+                        required
+                    >
+
+                    <span>
+                        🏔️ HIMALAYA — Snow & Mountains
+                    </span>
+                </label>
+
+                <label class="theme-option">
+                    <input
+                        type="radio"
+                        name="theme"
+                        value="GANGA"
+                    >
+
+                    <span>
+                        🌊 GANGA — Rivers & Nature
+                    </span>
+                </label>
+
+                <label class="theme-option">
+                    <input
+                        type="radio"
+                        name="theme"
+                        value="VOLGA"
+                    >
+
+                    <span>
+                        🌌 VOLGA — Deep Blue & Silver
+                    </span>
+                </label>
+
+            </div>
+
+            <!-- Terms and Conditions -->
+            <label class="terms">
+
+                <input
+                    type="checkbox"
+                    id="terms"
+                    name="terms"
+                    required
+                >
+
+                <span>
+                    I agree to the
+                    <a href="terms.html">Terms of Service</a>
+                    and
+                    <a href="privacy.html">Privacy Policy</a>.
+                </span>
+
+            </label>
+
+            <!-- Submit Button -->
+            <button type="submit">
+                Create Account
+            </button>
+
+            <!-- Status Message -->
+            <p
+                class="message"
+                id="message"
+                role="status"
+                aria-live="polite"
+            ></p>
+
+        </form>
+
+        <!-- Login Link -->
+        <p class="login-link">
+            Already have an account?
+            <a href="login.html">Log In</a>
+        </p>
+
+    </main>
+
+    <script src="signup.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="supabase.js"></script>
+
+<script src="signup.js" defer></script>
+
+</body>
+
+</html>

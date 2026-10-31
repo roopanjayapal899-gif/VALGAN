@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>My Profile | VOLGAN</title>
+
+    <link rel="stylesheet" href="profile.css">
+</head>
+<body>
+
+    <header class="top-header">
+        <h1 class="logo">VOLGAN</h1>
+        <button id="logoutButton" type="button">Logout</button>
+    </header>
+
+    <main class="profile-container">
+
+        <section class="profile-card">
+
+            <div class="profile-avatar-container">
+
+    <img
+        id="profileAvatar"
+        class="profile-avatar"
+        src=""
+        alt="Profile Picture"
+    >
+
+    <label for="profileImageInput" class="change-photo-button">
+        📷 Change Photo
+    </label>
+
+    <input
+        type="file"
+        id="profileImageInput"
+        accept="image/jpeg,image/png,image/webp"
+        hidden
+    >
+
+</div>
+
+<p id="profileImageMessage" role="status"></p>
+                👤
+            </>
+
+            <h2 id="profileName">Loading profile...</h2>
+
+            <p id="profileUsername">@username</p>
+
+            <p id="profileTheme">Theme: Loading...</p>
+
+            <p id="profileEmail"></p>
+
+            <div class="profile-stats">
+                <div>
+                    <strong id="postCount">0</strong>
+                    <span>Posts</span>
+                </div>
+
+                <div>
+                    <strong id="friendsCount">0</strong>
+                    <span>Friends</span>
+                </div>
+
+                <div>
+                    <strong id="followersCount">0</strong>
+                    <span>Followers</span>
+                </div>
+            </div>
+
+            <button id="editProfileButton" type="button">
+    ✏️ Edit Profile
+</button><form id="editProfileForm" hidden>
+    <label for="editName">Name</label>
+    <input
+        type="text"
+        id="editName"
+        maxlength="50"
+        required
+    ><label for="editUsername">Username</label>
+<input
+    type="text"
+    id="editUsername"
+    maxlength="20"
+    required
+>
+
+<label for="editBio">Bio</label>
+<textarea
+    id="editBio"
+    maxlength="200"
+    rows="3"
+    placeholder="Tell us about yourself"
+></textarea>
+
+<div class="edit-profile-actions">
+    <button type="submit" id="saveProfileButton">
+        Save Changes
+    </button>
+
+    <button type="button" id="cancelEditButton">
+        Cancel
+    </button>
+</div>
+
+</form>
+
+        </section>
+
+        <nav class="profile-navigation">
+            <a href="create-post.html">📝 Create Post</a>
+            <a href="friends.html">👥 Friends</a>
+            <a href="notifications.html">🔔 Notifications</a>
+            <a href="settings.html">⚙️ Settings</a>
+        </nav>
+
+        <section class="posts-section">
+            <h2>My Posts</h2>
+
+            <div id="postsContainer">
+                <p>Your posts will appear here.</p>
+            </div>
+        </section>
+
+        <p id="profileMessage" role="status"></p>
+
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase.js"></script>
+    <script src="profile.js" defer></script>
+
+  
+
+</body>
+</html>

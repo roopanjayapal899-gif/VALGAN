@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings | VOLGAN</title>
+    <link rel="stylesheet" href="settings.css">
+</head>
+<body>
+
+<header class="settings-header">
+    <a href="index.html">←</a>
+    <h2>Settings</h2>
+    <span>⚙</span>
+</header>
+
+<main class="settings-container">
+
+    <section class="settings-profile">
+        <div class="settings-avatar">👤</div>
+        <div>
+            <h3>VOLGAN User</h3>
+            <p>Manage your account</p>
+        </div>
+    </section>
+
+    <section class="settings-section">
+        <h3>Account</h3>
+
+        <button class="settings-item" data-action="profile">
+            <span>👤</span>
+            <div>
+                <strong>Edit Profile</strong>
+                <small>Change your name, username and bio</small>
+            </div>
+            <span>›</span>
+        </button>
+
+        <button class="settings-item" data-action="password">
+            <span>🔐</span>
+            <div>
+                <strong>Change Password</strong>
+                <small>Update your account password</small>
+            </div>
+            <span>›</span>
+        </button>
+
+        <button class="settings-item" data-action="email">
+            <span>✉️</span>
+            <div>
+                <strong>Email Address</strong>
+                <small>Manage your registered email</small>
+            </div>
+            <span>›</span>
+        </button>
+    </section>
+
+    <section class="settings-section">
+        <h3>Privacy & Security</h3>
+
+        <button class="settings-item" data-action="privacy">
+            <span>🛡️</span>
+            <div>
+                <strong>Privacy Settings</strong>
+                <small>Control your account visibility</small>
+            </div>
+            <span>›</span>
+        </button>
+
+        <button class="settings-item" data-action="blocked">
+            <span>🚫</span>
+            <div>
+                <strong>Blocked Users</strong>
+                <small>Manage blocked accounts</small>
+            </div>
+            <span>›</span>
+        </button>
+    </section>
+
+    <section class="settings-section">
+        <h3>Preferences</h3>
+
+        <button class="settings-item" data-action="notifications">
+            <span>🔔</span>
+            <div>
+                <strong>Notifications</strong>
+                <small>Manage notification preferences</small>
+            </div>
+            <span>›</span>
+        </button>
+
+        <button class="settings-item" data-action="about">
+            <span>ℹ️</span>
+            <div>
+                <strong>About VOLGAN</strong>
+                <small>App information</small>
+            </div>
+            <span>›</span>
+        </button>
+    </section>
+
+    <button id="logoutButton" class="logout-button">
+        Log Out
+    </button>
+
+    <p id="settingsMessage"></p>
+
+    <footer>
+        VOLGAN © 2026
+    </footer>
+
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script>
+<script src="settings.js" defer></script>
+
+</body>
+</html>

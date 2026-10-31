@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Friends | VOLGAN</title>
+
+    <link rel="stylesheet" href="friends.css">
+</head>
+<body>
+
+    <header class="top-header">
+        <a href="index.html" class="logo">VOLGAN</a>
+        <a href="profile.html" class="profile-link">My Profile</a>
+    </header>
+
+    <main class="friends-container">
+
+        <section class="friends-heading">
+            <h1>Friends 👥</h1>
+            <p>Discover people and build your community.</p>
+        </section>
+
+        <section class="search-section">
+            <input
+                type="search"
+                id="userSearch"
+                placeholder="Search by username..."
+                autocomplete="off"
+            >
+
+            <button id="searchButton" type="button">
+                Search
+            </button>
+        </section>
+
+        <p id="friendsMessage" role="status"></p>
+
+        <section class="users-section">
+            <h2>Discover People</h2>
+
+            <div id="usersContainer">
+                <p>People will appear here.</p>
+            </div>
+        </section>
+
+        <section class="requests-section">
+            <h2>Friend Requests</h2>
+
+            <div id="requestsContainer">
+                <p>No friend requests loaded yet.</p>
+            </div>
+        </section>
+
+        <section class="my-friends-section">
+            <h2>My Friends</h2>
+
+            <div id="myFriendsContainer">
+                <p>Your friends will appear here.</p>
+            </div>
+        </section>
+
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase.js"></script>
+    <script src="friends.js" defer></script>
+
+</body>
+</html>

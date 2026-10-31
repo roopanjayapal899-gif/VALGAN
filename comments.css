@@ -1,0 +1,175 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f5f6fa;
+    color: #222;
+}
+
+.comments-header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 18px;
+    background: white;
+    border-bottom: 1px solid #eee;
+}
+
+.comments-header a {
+    color: #222;
+    text-decoration: none;
+    font-size: 26px;
+}
+
+.comments-header h2 {
+    font-size: 19px;
+}
+
+.comments-container {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 0 15px;
+}
+
+.post-preview {
+    background: white;
+    padding: 18px;
+    border-radius: 10px;
+    margin-bottom: 25px;
+}
+
+.post-preview strong {
+    font-size: 15px;
+}
+
+.post-preview p {
+    margin-top: 12px;
+    line-height: 1.5;
+    font-size: 14px;
+}
+
+.post-actions {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-top: 18px;
+    padding-top: 12px;
+    border-top: 1px solid #eee;
+}
+
+#likeButton {
+    border: none;
+    background: transparent;
+    font-size: 15px;
+    cursor: pointer;
+    color: #333;
+}
+
+#likeButton.liked {
+    color: #e63956;
+    font-weight: bold;
+}
+
+#likeCount {
+    color: #777;
+    font-size: 13px;
+}
+
+.comments-section h3 {
+    font-size: 17px;
+    margin-bottom: 15px;
+}
+
+.comment-card {
+    display: flex;
+    gap: 12px;
+    background: white;
+    padding: 15px;
+    border-radius: 9px;
+    margin-bottom: 10px;
+}
+
+.comment-avatar {
+    width: 38px;
+    height: 38px;
+    min-width: 38px;
+    border-radius: 50%;
+    background: #eee;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.comment-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.comment-content strong {
+    font-size: 13px;
+}
+
+.comment-content p {
+    font-size: 14px;
+    margin-top: 6px;
+    overflow-wrap: anywhere;
+    line-height: 1.5;
+}
+
+.comment-content small {
+    display: block;
+    color: #888;
+    margin-top: 7px;
+    font-size: 11px;
+}
+
+.delete-comment {
+    border: none;
+    background: transparent;
+    color: #d33;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+#commentForm {
+    display: flex;
+    gap: 8px;
+    margin-top: 20px;
+}
+
+#commentInput {
+    flex: 1;
+    min-width: 0;
+    padding: 13px;
+    border: 1px solid #ddd;
+    border-radius: 25px;
+    font-size: 14px;
+}
+
+#commentForm button {
+    border: none;
+    background: #222;
+    color: white;
+    padding: 0 18px;
+    border-radius: 25px;
+    cursor: pointer;
+}
+
+#commentMessage {
+    text-align: center;
+    font-size: 12px;
+    margin-top: 12px;
+    color: #777;
+}
+
+.empty-comments {
+    background: white;
+    padding: 35px 15px;
+    text-align: center;
+    color: #888;
+    border-radius: 9px;
+}

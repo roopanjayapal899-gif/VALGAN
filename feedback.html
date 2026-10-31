@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feedback | VOLGAN</title>
+    <link rel="stylesheet" href="feedback.css">
+</head>
+<body>
+
+<header class="feedback-header">
+    <a href="settings.html">←</a>
+    <h2>Feedback & Suggestions</h2>
+</header>
+
+<main class="feedback-container">
+
+    <section class="feedback-intro">
+        <h2>Your Voice Matters!</h2>
+        <p>Help us make VOLGAN better. Share your ideas and suggestions with us.</p>
+    </section>
+
+    <form id="feedbackForm">
+
+        <label for="feedbackType">Feedback Category</label>
+        <select id="feedbackType" required>
+            <option value="">Select category</option>
+            <option value="Suggestion">New Feature Suggestion</option>
+            <option value="Improvement">Feature Improvement</option>
+            <option value="Experience">User Experience</option>
+            <option value="Design">Design & UI</option>
+            <option value="Other">Other</option>
+        </select>
+
+        <label for="feedbackRating">How is your experience?</label>
+        <select id="feedbackRating" required>
+            <option value="">Select rating</option>
+            <option value="Excellent">Excellent</option>
+            <option value="Good">Good</option>
+            <option value="Average">Average</option>
+            <option value="Poor">Poor</option>
+        </select>
+
+        <label for="feedbackDetails">Your Feedback</label>
+        <textarea
+            id="feedbackDetails"
+            rows="6"
+            maxlength="1000"
+            placeholder="Write your feedback or suggestion..."
+            required
+        ></textarea>
+
+        <small id="feedbackCount">0/1000</small>
+
+        <button type="submit">Submit Feedback</button>
+
+        <p id="feedbackMessage"></p>
+
+    </form>
+
+</main>
+
+<script src="feedback.js" defer></script>
+
+</body>
+</html>

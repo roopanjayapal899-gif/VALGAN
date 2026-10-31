@@ -1,0 +1,122 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f4f6f9;
+    color: #222;
+}
+
+.about-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 16px 20px;
+    background: #fff;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.about-header a {
+    text-decoration: none;
+    color: #222;
+    font-size: 25px;
+}
+
+.about-header h2 {
+    font-size: 20px;
+}
+
+.about-container {
+    width: 92%;
+    max-width: 700px;
+    margin: 30px auto;
+}
+
+.about-brand {
+    background: #2563eb;
+    color: #fff;
+    text-align: center;
+    padding: 40px 20px;
+    border-radius: 16px;
+    margin-bottom: 25px;
+}
+
+.about-logo {
+    width: 75px;
+    height: 75px;
+    margin: 0 auto 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    color: #2563eb;
+    border-radius: 20px;
+    font-size: 42px;
+    font-weight: bold;
+}
+
+.about-brand h1 {
+    font-size: 30px;
+    letter-spacing: 3px;
+    margin-bottom: 8px;
+}
+
+.about-brand p {
+    font-size: 15px;
+    margin-bottom: 15px;
+}
+
+.about-brand span {
+    font-size: 12px;
+    opacity: 0.8;
+}
+
+.about-section {
+    background: #fff;
+    padding: 22px;
+    border-radius: 12px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.about-section h3 {
+    font-size: 19px;
+    margin-bottom: 13px;
+}
+
+.about-section p {
+    color: #666;
+    font-size: 14px;
+    line-height: 1.8;
+}
+
+.about-feature {
+    padding: 13px 0;
+    border-bottom: 1px solid #eee;
+    font-size: 14px;
+}
+
+.about-feature:last-child {
+    border-bottom: none;
+}
+
+.about-footer {
+    text-align: center;
+    padding: 25px 10px;
+    color: #888;
+    font-size: 13px;
+    line-height: 2;
+}
+
+@media (max-width: 480px) {
+    .about-container {
+        margin-top: 20px;
+    }
+
+    .about-brand {
+        padding: 32px 15px;
+    }
+}

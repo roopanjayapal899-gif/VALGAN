@@ -1,0 +1,276 @@
+/* =================================
+   VOLGAN FRIENDS PAGE
+================================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f3f5f9;
+    color: #1f2937;
+    line-height: 1.5;
+}
+
+/* Header */
+
+.top-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+    background: #ffffff;
+    border-bottom: 1px solid #e5e7eb;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.logo {
+    color: #2563eb;
+    font-size: 24px;
+    font-weight: bold;
+    text-decoration: none;
+    letter-spacing: 1px;
+}
+
+.profile-link {
+    color: #2563eb;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+/* Main Container */
+
+.friends-container {
+    width: 100%;
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 20px 16px 40px;
+}
+
+/* Heading */
+
+.friends-heading {
+    margin-bottom: 24px;
+}
+
+.friends-heading h1 {
+    font-size: 28px;
+    margin-bottom: 6px;
+    color: #111827;
+}
+
+.friends-heading p {
+    color: #6b7280;
+    font-size: 14px;
+}
+
+/* Search */
+
+.search-section {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 24px;
+}
+
+.search-section input {
+    flex: 1;
+    min-width: 0;
+    padding: 13px 14px;
+    border: 1px solid #d1d5db;
+    border-radius: 10px;
+    outline: none;
+    font-size: 15px;
+    background: #ffffff;
+}
+
+.search-section input:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+.search-section button {
+    padding: 12px 18px;
+    border: none;
+    border-radius: 10px;
+    background: #2563eb;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.search-section button:active {
+    transform: scale(0.97);
+}
+
+/* Status Message */
+
+#friendsMessage {
+    margin: 12px 0;
+    font-size: 14px;
+    color: #4b5563;
+    overflow-wrap: anywhere;
+}
+
+/* Sections */
+
+.users-section,
+.requests-section,
+.my-friends-section {
+    margin-bottom: 28px;
+}
+
+.users-section h2,
+.requests-section h2,
+.my-friends-section h2 {
+    font-size: 19px;
+    margin-bottom: 14px;
+    color: #111827;
+}
+
+/* Containers */
+
+#usersContainer,
+#requestsContainer,
+#myFriendsContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* Empty State */
+
+#usersContainer > p,
+#requestsContainer > p,
+#myFriendsContainer > p {
+    padding: 20px;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    text-align: center;
+    color: #6b7280;
+    font-size: 14px;
+}
+
+/* User Cards - for future JS */
+
+.user-card,
+.friend-card,
+.request-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+}
+
+/* User Avatar */
+
+.user-avatar {
+    width: 48px;
+    height: 48px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    object-fit: cover;
+    background: #e5e7eb;
+}
+
+/* User Details */
+
+.user-details {
+    flex: 1;
+    min-width: 0;
+}
+
+.user-details h3 {
+    font-size: 15px;
+    margin-bottom: 3px;
+    overflow-wrap: anywhere;
+}
+
+.user-details p {
+    color: #6b7280;
+    font-size: 13px;
+    overflow-wrap: anywhere;
+}
+
+/* Action Buttons */
+
+.user-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.user-actions button {
+    padding: 9px 12px;
+    border: none;
+    border-radius: 8px;
+    background: #2563eb;
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.user-actions .accept-button {
+    background: #16a34a;
+}
+
+.user-actions .reject-button {
+    background: #e5e7eb;
+    color: #374151;
+}
+
+/* Responsive Mobile Layout */
+
+@media (max-width: 480px) {
+    .top-header {
+        padding: 14px 16px;
+    }
+
+    .logo {
+        font-size: 21px;
+    }
+
+    .friends-container {
+        padding: 18px 12px 32px;
+    }
+
+    .friends-heading h1 {
+        font-size: 25px;
+    }
+
+    .search-section {
+        gap: 8px;
+    }
+
+    .search-section button {
+        padding: 11px 13px;
+    }
+
+    .user-card,
+    .friend-card,
+    .request-card {
+        padding: 12px;
+        gap: 9px;
+    }
+
+    .user-avatar {
+        width: 42px;
+        height: 42px;
+    }
+
+    .user-actions button {
+        padding: 8px 10px;
+    }
+}

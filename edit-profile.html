@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Profile | VOLGAN</title>
+    <link rel="stylesheet" href="edit-profile.css">
+</head>
+<body>
+
+<header class="edit-header">
+    <a href="profile.html">←</a>
+    <h2>Edit Profile</h2>
+</header>
+
+<main class="edit-container">
+
+    <form id="editProfileForm">
+
+        <div class="profile-photo-section">
+            <img
+                id="profilePreview"
+                src="https://placehold.co/120x120"
+                alt="Profile Photo"
+            >
+
+            <label for="profilePhoto">Change Photo</label>
+            <input
+                type="file"
+                id="profilePhoto"
+                accept="image/*"
+                hidden
+            >
+        </div>
+
+        <div class="form-group">
+            <label for="fullName">Full Name</label>
+            <input type="text" id="fullName" maxlength="50"
+                placeholder="Enter your name">
+        </div>
+
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" id="username" maxlength="30"
+                placeholder="Enter username">
+        </div>
+
+        <div class="form-group">
+            <label for="bio">Bio</label>
+            <textarea id="bio" rows="4" maxlength="160"
+                placeholder="Tell something about yourself"></textarea>
+            <small id="bioCount">0/160</small>
+        </div>
+
+        <button type="submit" id="saveProfileBtn">
+            Save Changes
+        </button>
+
+        <p id="editMessage"></p>
+
+    </form>
+
+</main>
+
+<script src="edit-profile.js" defer></script>
+
+</body>
+</html>

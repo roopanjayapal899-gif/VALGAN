@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blocked Users | VOLGAN</title>
+    <link rel="stylesheet" href="blocked-users.css">
+</head>
+<body>
+
+<header class="blocked-header">
+    <a href="privacy.html">←</a>
+    <h2>Blocked Users</h2>
+</header>
+
+<main class="blocked-container">
+
+    <section class="blocked-intro">
+        <h2>Manage Blocked Accounts</h2>
+        <p>People you block cannot interact with you on VOLGAN.</p>
+    </section>
+
+    <div class="blocked-search">
+        <input
+            type="search"
+            id="blockedSearch"
+            placeholder="Search blocked users..."
+        >
+    </div>
+
+    <p id="blockedCount">0 blocked users</p>
+
+    <section id="blockedList"></section>
+
+</main>
+
+<script src="blocked-users.js" defer></script>
+
+</body>
+</html>

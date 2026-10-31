@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Notifications | VOLGAN</title>
+    <link rel="stylesheet" href="notifications.css">
+</head>
+<body>
+
+    <header class="notification-header">
+        <a href="index.html" class="logo">VOLGAN</a>
+        <h2>Notifications</h2>
+        <a href="settings.html" class="settings-link">⚙</a>
+    </header>
+
+    <main class="notification-container">
+
+        <section class="notification-top">
+            <div>
+                <h2>Activity</h2>
+                <p>Stay updated with your world.</p>
+            </div>
+
+            <button id="markAllRead">
+                Mark all read
+            </button>
+        </section>
+
+        <nav class="notification-tabs">
+            <button class="tab active" data-filter="all">
+                All
+            </button>
+
+            <button class="tab" data-filter="unread">
+                Unread
+            </button>
+        </nav>
+
+        <div id="notificationCount" class="notification-count">
+            0 Notifications
+        </div>
+
+        <section id="notificationList">
+            <p class="empty-message">Loading notifications...</p>
+        </section>
+
+    </main>
+
+    <nav class="bottom-nav">
+        <a href="index.html">⌂<span>Home</span></a>
+        <a href="friends.html">♧<span>Friends</span></a>
+        <a href="create-post.html">＋<span>Create</span></a>
+        <a href="search.html">⌕<span>Search</span></a>
+        <a href="profile.html">◉<span>Profile</span></a>
+    </nav>
+
+    <script src="notifications.js" defer></script>
+
+</body>
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Report a Problem | VOLGAN</title>
+    <link rel="stylesheet" href="report.css">
+</head>
+<body>
+
+<header class="report-header">
+    <a href="settings.html">←</a>
+    <h2>Report a Problem</h2>
+</header>
+
+<main class="report-container">
+
+    <section class="report-intro">
+        <h2>We're here to help</h2>
+        <p>Tell us what went wrong. Your feedback helps us improve VOLGAN.</p>
+    </section>
+
+    <form id="reportForm">
+
+        <label for="reportType">What would you like to report?</label>
+        <select id="reportType" required>
+            <option value="">Select a category</option>
+            <option value="Fake Account">Fake Account</option>
+            <option value="Harassment">Harassment or Bullying</option>
+            <option value="Inappropriate Content">Inappropriate Content</option>
+            <option value="Spam">Spam</option>
+            <option value="Technical Issue">Technical Issue</option>
+            <option value="Other">Other</option>
+        </select>
+
+        <label for="reportDetails">Describe the problem</label>
+        <textarea
+            id="reportDetails"
+            rows="6"
+            maxlength="1000"
+            placeholder="Explain what happened..."
+            required
+        ></textarea>
+
+        <label for="reportEmail">Email address (optional)</label>
+        <input
+            type="email"
+            id="reportEmail"
+            placeholder="Enter your email"
+        >
+
+        <button type="submit">Submit Report</button>
+
+        <p id="reportMessage"></p>
+
+    </form>
+
+</main>
+
+<script src="report.js" defer></script>
+
+</body>
+</html>
