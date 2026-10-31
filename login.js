@@ -39,7 +39,6 @@ togglePassword.addEventListener("click", function () {
 // Login Form
 loginForm.addEventListener("submit", async function (event) {
     event.preventDefault();
-  alert("VOLGAN LOGIN JS WORKING");
 
     message.textContent = "";
 
