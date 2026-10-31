@@ -93,14 +93,13 @@ console.log("Password length:", password.length);
             return;
         }
 
-        showMessage("Login successful! Welcome to VOLGAN.", "success");
+    showMessage("Login successful! Welcome to VOLGAN.", "success");
 
-        // Redirect to profile page
-        // TEMPORARY LOGIN DEBUG
-showMessage(
-    "Supabase Login Successful!",
-    "success"
-);
+loginButton.disabled = false;
+loginButton.textContent = "Login";
+
+// Redirect to Home page
+window.location.href = "./index.html";
 
 loginButton.disabled = false;
 loginButton.textContent = "Login";
