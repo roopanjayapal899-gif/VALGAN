@@ -1,7 +1,4 @@
 // VOLGAN HOME PAGE
-
-const welcomeMessage = document.getElementById("welcomeMessage");
-const userTheme = document.getElementById("userTheme");
 const userAvatar = document.getElementById("userAvatar");
 const feedContainer = document.getElementById("feedContainer");
 
