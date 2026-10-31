@@ -7,7 +7,7 @@ const textPostButton = document.getElementById("textPostButton");
 
 async function initializeHomePage() {
     if (typeof supabaseClient === "undefined") {
-        welcomeMessage.textContent = "Connection error";
+        
         feedContainer.textContent = "Please check supabase.js.";
         return;
     }
@@ -45,7 +45,6 @@ console.log("VOLGAN: Session found on Home page", session.user.email);
     } catch (error) {
         console.error("VOLGAN Home Error:", error);
 
-        welcomeMessage.textContent = "Unable to load your account.";
         feedContainer.textContent =
             "Please refresh the page and try again.";
     }
