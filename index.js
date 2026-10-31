@@ -24,9 +24,12 @@ async function initializeHomePage() {
         const session = data.session;
 
         if (!session) {
-            window.location.replace("login.html");
-            return;
-        }
+    console.log("VOLGAN: No session found on Home page");
+    window.location.replace("./login.html");
+    return;
+}
+
+console.log("VOLGAN: Session found on Home page", session.user.email);
 
         const user = session.user;
         const metadata = user.user_metadata || {};
