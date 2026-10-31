@@ -94,6 +94,12 @@ console.log("Password length:", password.length);
         }
 
     showMessage("Login successful! Welcome to VOLGAN.", "success");
+        loginButton.disabled = true;
+loginButton.textContent = "Redirecting...";
+
+setTimeout(() => {
+    window.location.replace("./index.html");
+}, 500);
 
 loginButton.disabled = false;
 loginButton.textContent = "Login";
