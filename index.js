@@ -161,45 +161,7 @@ async function loadFeed() {
             name.textContent = fullName;
 
             header.append(avatar, name);
-
-            // EDIT POST
-if (post.user_id === currentUser.id) {
-
-    const editButton = document.createElement("button");
-    editButton.textContent = "Edit";
-    editButton.className = "edit-post-button";
-
-    editButton.addEventListener("click", async () => {
-
-        const newContent = prompt(
-            "Edit your post:",
-            post.content || ""
-        );
-
-        if (newContent === null) return;
-
-        if (!newContent.trim() && !post.image_url) {
-            alert("Post cannot be empty.");
-            return;
-        }
-
-        const { error } = await supabaseClient
-            .from("posts")
-            .update({ content: newContent.trim() })
-            .eq("id", post.id)
-            .eq("user_id", currentUser.id);
-
-        if (error) {
-            console.error("Edit error:", error);
-            alert("Unable to edit post.");
-            return;
-        }
-
-        alert("Post updated!");
-        await loadFeed();
-    });
-
-    header.appendChild(editButton);
+            header.appendChild(editButton);
 }
             
             postCard.appendChild(header);
