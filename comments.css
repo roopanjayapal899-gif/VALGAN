@@ -1,3 +1,4 @@
+
 * {
     margin: 0;
     padding: 0;
@@ -6,72 +7,77 @@
 
 body {
     font-family: Arial, sans-serif;
-    background: #f5f6fa;
-    color: #222;
+    background: #f3f4f8;
+    color: #202332;
+    padding-bottom: 30px;
 }
 
+/* HEADER */
 .comments-header {
     display: flex;
     align-items: center;
-    gap: 20px;
-    padding: 18px;
-    background: white;
-    border-bottom: 1px solid #eee;
+    gap: 18px;
+    padding: 18px 16px;
+    background: #fff;
+    border-bottom: 1px solid #e5e5e5;
+    position: sticky;
+    top: 0;
+    z-index: 10;
 }
 
 .comments-header a {
-    color: #222;
+    color: #202332;
+    font-size: 28px;
     text-decoration: none;
-    font-size: 26px;
 }
 
 .comments-header h2 {
-    font-size: 19px;
+    font-size: 21px;
 }
 
+/* MAIN */
 .comments-container {
-    max-width: 600px;
-    margin: 20px auto;
-    padding: 0 15px;
+    width: 100%;
+    max-width: 650px;
+    margin: auto;
+    padding: 18px 14px;
 }
 
+/* ORIGINAL MOMENT */
 .post-preview {
-    background: white;
-    padding: 18px;
-    border-radius: 10px;
+    background: #fff;
+    border-radius: 15px;
+    padding: 20px;
     margin-bottom: 25px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
 }
 
-.post-preview strong {
-    font-size: 15px;
+#postAuthor {
+    display: block;
+    font-size: 17px;
+    margin-bottom: 12px;
 }
 
-.post-preview p {
-    margin-top: 12px;
-    line-height: 1.5;
-    font-size: 14px;
+#postContent {
+    font-size: 16px;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
 }
 
 .post-actions {
     display: flex;
     align-items: center;
-    gap: 15px;
-    margin-top: 18px;
-    padding-top: 12px;
+    gap: 18px;
     border-top: 1px solid #eee;
+    margin-top: 18px;
+    padding-top: 14px;
 }
 
-#likeButton {
-    border: none;
+.post-actions button {
     background: transparent;
+    border: none;
     font-size: 15px;
     cursor: pointer;
-    color: #333;
-}
-
-#likeButton.liked {
-    color: #e63956;
-    font-weight: bold;
 }
 
 #likeCount {
@@ -79,97 +85,142 @@ body {
     font-size: 13px;
 }
 
+/* WHISPERS */
 .comments-section h3 {
-    font-size: 17px;
-    margin-bottom: 15px;
+    font-size: 20px;
+    margin-bottom: 16px;
 }
 
-.comment-card {
+#commentsList {
     display: flex;
-    gap: 12px;
-    background: white;
-    padding: 15px;
-    border-radius: 9px;
+    flex-direction: column;
+    gap: 13px;
+}
+
+/* WHISPER CARD */
+.whisper-card {
+    background: #fff;
+    border-radius: 14px;
+    padding: 16px;
+    box-shadow: 0 2px 7px rgba(0,0,0,0.04);
+}
+
+.whisper-user {
     margin-bottom: 10px;
 }
 
-.comment-avatar {
-    width: 38px;
-    height: 38px;
-    min-width: 38px;
-    border-radius: 50%;
-    background: #eee;
+.whisper-author {
+    font-size: 15px;
+}
+
+.whisper-content {
+    font-size: 15px;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+    margin-bottom: 13px;
+}
+
+.whisper-actions {
     display: flex;
     align-items: center;
-    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
 }
 
-.comment-content {
-    flex: 1;
-    min-width: 0;
-}
-
-.comment-content strong {
-    font-size: 13px;
-}
-
-.comment-content p {
-    font-size: 14px;
-    margin-top: 6px;
-    overflow-wrap: anywhere;
-    line-height: 1.5;
-}
-
-.comment-content small {
-    display: block;
-    color: #888;
-    margin-top: 7px;
-    font-size: 11px;
-}
-
-.delete-comment {
+.whisper-actions button {
     border: none;
     background: transparent;
-    color: #d33;
     cursor: pointer;
-    font-size: 12px;
+    font-size: 13px;
+    color: #626779;
 }
 
+.whisper-actions .whisper-globe-button {
+    font-size: 20px;
+    padding: 2px;
+}
+
+.whisper-like-count {
+    font-size: 12px;
+    color: #777;
+    margin-left: -10px;
+}
+
+.whisper-actions .whisper-reply-button {
+    font-weight: 600;
+}
+
+.whisper-actions .whisper-menu-button {
+    margin-left: auto;
+    font-size: 22px;
+}
+
+/* WRITE WHISPER */
 #commentForm {
     display: flex;
-    gap: 8px;
-    margin-top: 20px;
+    align-items: center;
+    gap: 9px;
+    margin-top: 22px;
+    background: #fff;
+    padding: 9px;
+    border-radius: 30px;
+    border: 1px solid #e2e2e2;
 }
 
 #commentInput {
     flex: 1;
     min-width: 0;
-    padding: 13px;
-    border: 1px solid #ddd;
-    border-radius: 25px;
+    border: none;
+    outline: none;
+    padding: 11px 12px;
     font-size: 14px;
+    background: transparent;
 }
 
 #commentForm button {
     border: none;
-    background: #222;
-    color: white;
-    padding: 0 18px;
+    background: #202332;
+    color: #fff;
+    padding: 12px 19px;
     border-radius: 25px;
+    font-size: 14px;
     cursor: pointer;
 }
 
 #commentMessage {
-    text-align: center;
-    font-size: 12px;
-    margin-top: 12px;
-    color: #777;
+    font-size: 13px;
+    margin: 12px 5px;
+    color: #666;
 }
 
-.empty-comments {
-    background: white;
-    padding: 35px 15px;
+/* REPLY INPUT */
+.whisper-reply-input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    margin-top: 12px;
+    font-size: 14px;
+}
+
+/* EMPTY STATE */
+.empty-whispers {
     text-align: center;
+    padding: 30px 15px;
     color: #888;
-    border-radius: 9px;
+}
+
+/* SMALL SCREEN */
+@media (max-width: 380px) {
+    .whisper-actions {
+        gap: 10px;
+    }
+
+    .whisper-actions button {
+        font-size: 12px;
+    }
+
+    .whisper-actions .whisper-globe-button {
+        font-size: 18px;
+    }
 }
