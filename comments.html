@@ -1,53 +1,130 @@
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Comments | VOLGAN</title>
+
+    <title>Whisper | VOLGAN</title>
+
     <link rel="stylesheet" href="comments.css">
 </head>
+
 <body>
 
-<header class="comments-header">
-    <a href="index.html">←</a>
-    <h2>Comments</h2>
-</header>
+    <!-- HEADER -->
+    <header class="comments-header">
+        <a href="index.html" aria-label="Back">←</a>
+        <h2>Whisper 💬</h2>
+    </header>
 
-<main class="comments-container">
 
-    <section class="post-preview">
-        <strong id="postAuthor">VOLGAN User</strong>
-        <p id="postContent">Sample post content appears here.</p>
+    <main class="comments-container">
 
-        <div class="post-actions">
-            <button id="likeButton">♡ Like</button>
-            <span id="likeCount">0 Likes</span>
-        </div>
-    </section>
+        <!-- ORIGINAL MOMENT -->
+        <section class="post-preview">
 
-    <section class="comments-section">
-        <h3>Comments</h3>
+            <strong id="postAuthor">VOLGAN User</strong>
 
-        <div id="commentsList"></div>
+            <p id="postContent">
+                Loading Moment...
+            </p>
 
-        <form id="commentForm">
-            <input
-                type="text"
-                id="commentInput"
-                placeholder="Write a comment..."
-                maxlength="500"
-                required
-            >
+            <div class="post-actions">
 
-            <button type="submit">Post</button>
-        </form>
+                <button id="likeButton" type="button">
+                    🌍 Wander
+                </button>
 
-        <p id="commentMessage"></p>
-    </section>
+                <span id="likeCount">0 Wander</span>
 
-</main>
+            </div>
 
-<script src="comments.js" defer></script>
+        </section>
+
+
+        <!-- WHISPERS -->
+        <section class="comments-section">
+
+            <h3>Whispers 💬</h3>
+
+            <div id="commentsList"></div>
+
+            <!-- WHISPER TEMPLATE -->
+            <template id="whisperTemplate">
+
+                <article class="whisper-card">
+
+                    <div class="whisper-user">
+                        <strong class="whisper-author">
+                            VOLGAN User
+                        </strong>
+                    </div>
+
+                    <p class="whisper-content"></p>
+
+                    <div class="whisper-actions">
+
+                        <button
+                            type="button"
+                            class="whisper-globe-button">
+                            🌍
+                        </button>
+
+                        <span class="whisper-like-count">
+                            0
+                        </span>
+
+                        <button
+                            type="button"
+                            class="whisper-reply-button">
+                            Reply
+                        </button>
+
+                        <button
+                            type="button"
+                            class="whisper-menu-button">
+                            ⋯
+                        </button>
+
+                    </div>
+
+                </article>
+
+            </template>
+
+
+            <!-- WRITE WHISPER -->
+            <form id="commentForm">
+
+                <input
+                    type="text"
+                    id="commentInput"
+                    placeholder="Write a Whisper..."
+                    maxlength="500"
+                    required
+                >
+
+                <button type="submit">
+                    Send
+                </button>
+
+            </form>
+
+            <p id="commentMessage"></p>
+
+        </section>
+
+    </main>
+
+
+    <!-- SCRIPTS -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script src="supabase.js"></script>
+
+    <script src="comments.js" defer></script>
 
 </body>
 </html>
