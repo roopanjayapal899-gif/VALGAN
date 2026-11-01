@@ -1,305 +1,404 @@
-// ======================================
-// VOLGAN - MESSAGES FRONTEND
-// SAMPLE DATA ONLY
-// ======================================
+
+// VOLGAN - POSTCARD MESSAGING
+// Supabase based private messaging between Mates
+
+let currentUser = null;
+let activeChat = null;
+let allMates = [];
+let realtimeChannel = null;
 
 const chatList = document.getElementById("chatList");
 const chatSearch = document.getElementById("chatSearch");
+const chatListSection = document.getElementById("chatListSection");
+const chatWindow = document.getElementById("chatWindow");
+const backButton = document.getElementById("backButton");
+const chatUsername = document.getElementById("chatUsername");
+const chatStatus = document.getElementById("chatStatus");
+const messageList = document.getElementById("messageList");
+const messageForm = document.getElementById("messageForm");
+const messageInput = document.getElementById("messageInput");
 
-const chatListSection =
-    document.getElementById("chatListSection");
+// Get logged-in user
+async function checkLogin() {
+    const { data, error } = await supabaseClient.auth.getSession();
 
-const chatWindow =
-    document.getElementById("chatWindow");
-
-const backButton =
-    document.getElementById("backButton");
-
-const chatUsername =
-    document.getElementById("chatUsername");
-
-const chatStatus =
-    document.getElementById("chatStatus");
-
-const messageList =
-    document.getElementById("messageList");
-
-const messageForm =
-    document.getElementById("messageForm");
-
-const messageInput =
-    document.getElementById("messageInput");
-
-let activeChat = null;
-
-
-// ======================================
-// SAMPLE CONVERSATIONS
-// ======================================
-
-const conversations = [
-    {
-        id: 1,
-        name: "Arun",
-        username: "@arun",
-        online: true,
-        preview: "Hello! How are you?",
-        time: "10:30 AM",
-        messages: [
-            {
-                text: "Hi! Welcome to VOLGAN.",
-                sent: false,
-                time: "10:25 AM"
-            },
-            {
-                text: "Hello! How are you?",
-                sent: true,
-                time: "10:30 AM"
-            }
-        ]
-    },
-    {
-        id: 2,
-        name: "Kumar",
-        username: "@kumar",
-        online: false,
-        preview: "See you tomorrow!",
-        time: "Yesterday",
-        messages: [
-            {
-                text: "See you tomorrow!",
-                sent: false,
-                time: "Yesterday"
-            }
-        ]
-    },
-    {
-        id: 3,
-        name: "Priya",
-        username: "@priya",
-        online: true,
-        preview: "Nice post!",
-        time: "Yesterday",
-        messages: [
-            {
-                text: "Nice post!",
-                sent: false,
-                time: "Yesterday"
-            }
-        ]
-    }
-];
-
-
-// ======================================
-// SAFE ELEMENT
-// ======================================
-
-function createElement(tag, text, className = "") {
-    const element = document.createElement(tag);
-
-    element.textContent = text;
-
-    if (className) {
-        element.className = className;
+    if (error || !data.session) {
+        window.location.replace("./login.html");
+        return false;
     }
 
-    return element;
+    currentUser = data.session.user;
+    return true;
 }
 
+// Get profile details
+async function getProfiles(userIds) {
+    if (!userIds.length) return {};
 
-// ======================================
-// RENDER CHAT LIST
-// ======================================
+    const uniqueIds = [...new Set(userIds)];
 
-function renderChatList(searchTerm = "") {
+    const { data, error } = await supabaseClient
+        .from("profiles")
+        .select("id, username, full_name, avatar_path")
+        .in("id", uniqueIds);
 
-    chatList.replaceChildren();
+    if (error) {
+        console.error("Profile loading error:", error);
+        return {};
+    }
 
-    const filtered = conversations.filter(chat =>
-        chat.name.toLowerCase().includes(
-            searchTerm.toLowerCase()
-        )
-    );
+    const profileMap = {};
 
-    if (filtered.length === 0) {
-        chatList.appendChild(
-            createElement(
-                "p",
-                "No conversations found.",
-                "empty-chat"
-            )
+    (data || []).forEach(profile => {
+        profileMap[profile.id] = profile;
+    });
+
+    return profileMap;
+}
+
+// Load profile avatar
+async function getAvatar(path) {
+    if (!path) return "";
+
+    const { data, error } = await supabaseClient
+        .storage
+        .from("profile-images")
+        .createSignedUrl(path, 3600);
+
+    if (error) return "";
+
+    return data.signedUrl;
+}
+
+// Load accepted Mates
+async function loadMates() {
+    const { data, error } = await supabaseClient
+        .from("friend_requests")
+        .select("sender_id, receiver_id")
+        .eq("status", "accepted")
+        .or(
+            `sender_id.eq.${currentUser.id},receiver_id.eq.${currentUser.id}`
         );
+
+    if (error) {
+        console.error("Mate loading error:", error);
+        chatList.innerHTML = "<p>Unable to load Mates.</p>";
         return;
     }
 
-    filtered.forEach(chat => {
+    const mateIds = (data || []).map(row =>
+        row.sender_id === currentUser.id
+            ? row.receiver_id
+            : row.sender_id
+    );
 
-        const card = document.createElement("article");
+    const profiles = await getProfiles(mateIds);
+
+    allMates = mateIds.map(id => ({
+        id,
+        profile: profiles[id] || {
+            id,
+            username: "Unknown Mate",
+            full_name: "Unknown Mate"
+        }
+    }));
+
+    await loadInbox();
+}
+
+// Load recent messages
+async function loadInbox() {
+    const { data, error } = await supabaseClient
+        .from("messages")
+        .select("id, sender_id, receiver_id, content, created_at")
+        .or(
+            `sender_id.eq.${currentUser.id},receiver_id.eq.${currentUser.id}`
+        )
+        .order("created_at", { ascending: false });
+
+    if (error) {
+        console.error("Inbox error:", error);
+        chatList.innerHTML = "<p>Unable to load Postcards.</p>";
+        return;
+    }
+
+    const latestMessages = {};
+
+    (data || []).forEach(message => {
+        const otherId = message.sender_id === currentUser.id
+            ? message.receiver_id
+            : message.sender_id;
+
+        if (!latestMessages[otherId]) {
+            latestMessages[otherId] = message;
+        }
+    });
+
+    renderChatList(latestMessages);
+}
+
+// Render conversation list
+async function renderChatList(latestMessages = {}) {
+    chatList.innerHTML = "";
+
+    const searchText = (chatSearch?.value || "").toLowerCase();
+
+    const filteredMates = allMates.filter(mate => {
+        const name = mate.profile.full_name || "";
+        const username = mate.profile.username || "";
+
+        return name.toLowerCase().includes(searchText) ||
+               username.toLowerCase().includes(searchText);
+    });
+
+    if (!filteredMates.length) {
+        chatList.innerHTML = "<p class='empty-message'>No Mates found.</p>";
+        return;
+    }
+
+    for (const mate of filteredMates) {
+        const profile = mate.profile;
+        const name = profile.full_name || profile.username || "Mate";
+        const username = profile.username ? "@" + profile.username : "";
+        const latest = latestMessages[mate.id];
+
+        const card = document.createElement("div");
         card.className = "chat-card";
 
-        const avatar = createElement(
-            "div",
-            "👤",
-            "avatar"
-        );
+        const avatar = document.createElement("div");
+        avatar.className = "chat-avatar";
+        avatar.textContent = name.charAt(0).toUpperCase();
 
-        if (chat.online) {
-            avatar.appendChild(
-                createElement("span", "", "online-dot")
-            );
+        if (profile.avatar_path) {
+            const avatarUrl = await getAvatar(profile.avatar_path);
+
+            if (avatarUrl) {
+                avatar.textContent = "";
+                avatar.style.backgroundImage = `url("${avatarUrl}")`;
+                avatar.style.backgroundSize = "cover";
+                avatar.style.backgroundPosition = "center";
+            }
         }
 
         const details = document.createElement("div");
         details.className = "chat-details";
 
-        details.append(
-            createElement("h3", chat.name),
-            createElement("p", chat.preview)
-        );
+        const nameElement = document.createElement("strong");
+        nameElement.textContent = name;
 
-        const time = createElement(
-            "small",
-            chat.time,
-            "chat-time"
-        );
+        const preview = document.createElement("p");
+        preview.textContent = latest
+            ? latest.content
+            : "Start a Postcard 💌";
 
-        card.append(avatar, details, time);
+        const usernameElement = document.createElement("small");
+        usernameElement.textContent = username;
 
-        card.addEventListener("click", () => {
-            openChat(chat);
-        });
+        details.append(nameElement, usernameElement, preview);
+        card.append(avatar, details);
+
+        card.addEventListener("click", () => openChat(mate));
 
         chatList.appendChild(card);
-    });
+    }
 }
 
-
-// ======================================
-// OPEN CHAT
-// ======================================
-
-function openChat(chat) {
-
-    activeChat = chat;
-
-    chatUsername.textContent = chat.name;
-
-    chatStatus.textContent =
-        chat.online ? "Online" : "Offline";
+// Open conversation
+async function openChat(mate) {
+    activeChat = mate;
 
     chatListSection.hidden = true;
     chatWindow.hidden = false;
 
-    renderMessages();
+    chatUsername.textContent =
+        mate.profile.full_name ||
+        mate.profile.username ||
+        "Mate";
+
+    chatStatus.textContent = "Mate";
+
+    await loadMessages();
 }
 
+// Load messages for selected Mate
+async function loadMessages() {
+    if (!activeChat) return;
 
-// ======================================
-// RENDER MESSAGES
-// ======================================
+    messageList.innerHTML = "<p>Loading Postcards...</p>";
 
-function renderMessages() {
+    const otherId = activeChat.id;
 
-    messageList.replaceChildren();
+    const { data, error } = await supabaseClient
+        .from("messages")
+        .select("id, sender_id, receiver_id, content, created_at")
+        .or(
+            `and(sender_id.eq.${currentUser.id},receiver_id.eq.${otherId}),and(sender_id.eq.${otherId},receiver_id.eq.${currentUser.id})`
+        )
+        .order("created_at", { ascending: true });
 
-    if (!activeChat.messages.length) {
-        messageList.appendChild(
-            createElement(
-                "p",
-                "Start a conversation.",
-                "empty-chat"
-            )
-        );
+    if (error) {
+        console.error("Message loading error:", error);
+        messageList.innerHTML = "<p>Unable to load messages.</p>";
         return;
     }
 
-    activeChat.messages.forEach(message => {
+    renderMessages(data || []);
+}
+
+// Render conversation messages
+function renderMessages(messages) {
+    messageList.innerHTML = "";
+
+    if (!messages.length) {
+        messageList.innerHTML =
+            "<p class='empty-message'>Send your first Postcard 💌</p>";
+        return;
+    }
+
+    messages.forEach(message => {
+        const messageElement = document.createElement("div");
+
+        messageElement.className =
+            message.sender_id === currentUser.id
+                ? "message sent"
+                : "message received";
 
         const bubble = document.createElement("div");
+        bubble.className = "message-bubble";
+        bubble.textContent = message.content;
 
-        bubble.className =
-            "message-bubble " +
-            (message.sent ? "sent" : "received");
+        const time = document.createElement("small");
+        time.className = "message-time";
 
-        bubble.appendChild(
-            createElement("span", message.text)
-        );
+        time.textContent = new Date(message.created_at)
+            .toLocaleTimeString([], {
+                hour: "2-digit",
+                minute: "2-digit"
+            });
 
-        bubble.appendChild(
-            createElement("small", message.time)
-        );
-
-        messageList.appendChild(bubble);
-
+        messageElement.append(bubble, time);
+        messageList.appendChild(messageElement);
     });
 
     messageList.scrollTop = messageList.scrollHeight;
 }
 
-
-// ======================================
-// SEND MESSAGE - LOCAL DEMO
-// ======================================
-
-messageForm.addEventListener("submit", event => {
-
+// Send Postcard
+messageForm.addEventListener("submit", async function(event) {
     event.preventDefault();
 
-    const text = messageInput.value.trim();
+    if (!activeChat || !currentUser) return;
 
-    if (!text || !activeChat) return;
+    const content = messageInput.value.trim();
 
-    const now = new Date();
+    if (!content) return;
 
-    const time = now.toLocaleTimeString([], {
-        hour: "2-digit",
-        minute: "2-digit"
-    });
+    if (content.length > 2000) {
+        alert("Maximum 2000 characters allowed.");
+        return;
+    }
 
-    activeChat.messages.push({
-        text: text,
-        sent: true,
-        time: time
-    });
+    const sendButton = messageForm.querySelector("button");
+    sendButton.disabled = true;
 
-    activeChat.preview = text;
-    activeChat.time = time;
+    const { error } = await supabaseClient
+        .from("messages")
+        .insert({
+            sender_id: currentUser.id,
+            receiver_id: activeChat.id,
+            content: content
+        });
+
+    sendButton.disabled = false;
+
+    if (error) {
+        console.error("Send error:", error);
+        alert("Postcard could not be sent. Check your Mate connection.");
+        return;
+    }
 
     messageInput.value = "";
 
-    renderMessages();
-
+    await loadMessages();
+    await loadInbox();
 });
 
-
-// ======================================
-// BACK TO CHAT LIST
-// ======================================
-
-backButton.addEventListener("click", () => {
+// Back to inbox
+backButton.addEventListener("click", function() {
+    activeChat = null;
 
     chatWindow.hidden = true;
     chatListSection.hidden = false;
 
-    activeChat = null;
-
-    renderChatList(chatSearch.value);
-
+    loadInbox();
 });
 
-
-// ======================================
-// SEARCH CONVERSATIONS
-// ======================================
-
-chatSearch.addEventListener("input", () => {
-    renderChatList(chatSearch.value);
+// Search Mates
+chatSearch.addEventListener("input", function() {
+    loadInbox();
 });
 
+// Realtime messaging
+function startRealtime() {
+    if (realtimeChannel) {
+        supabaseClient.removeChannel(realtimeChannel);
+    }
 
-// ======================================
-// INITIALIZE
-// ======================================
+    realtimeChannel = supabaseClient
+        .channel("volgan-postcard-" + currentUser.id)
 
-renderChatList();
+        .on(
+            "postgres_changes",
+            {
+                event: "INSERT",
+                schema: "public",
+                table: "messages",
+                filter: `receiver_id=eq.${currentUser.id}`
+            },
+            async () => {
+                if (activeChat) await loadMessages();
+                await loadInbox();
+            }
+        )
+
+        .on(
+            "postgres_changes",
+            {
+                event: "INSERT",
+                schema: "public",
+                table: "messages",
+                filter: `sender_id=eq.${currentUser.id}`
+            },
+            async () => {
+                if (activeChat) await loadMessages();
+                await loadInbox();
+            }
+        )
+
+        .subscribe();
+}
+
+// Initialize Postcard
+async function initPostcard() {
+    const loggedIn = await checkLogin();
+
+    if (!loggedIn) return;
+
+    await loadMates();
+
+    startRealtime();
+
+    // Open a Mate directly using ?user_id=
+    const params = new URLSearchParams(window.location.search);
+    const userId = params.get("user_id");
+
+    if (userId) {
+        const mate = allMates.find(item => item.id === userId);
+
+        if (mate) {
+            await openChat(mate);
+        }
+    }
+}
+
+initPostcard();
