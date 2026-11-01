@@ -70,10 +70,11 @@ async function initializeHomePage() {
 
         const metadata = currentUser.user_metadata || {};
 
-        const username =
-            metadata.username ||
-            currentUser.email?.split("@")[0] ||
-            "VOLGAN User";
+const fullName =
+    metadata.full_name ||
+    metadata.name ||
+    metadata.username ||
+    "VOLGAN User";
 
         if (userAvatar) {
     userAvatar.textContent =
