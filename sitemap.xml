@@ -16,4 +16,9 @@
         <priority>0.8</priority>
     </url>
 
+    <url>
+    <loc>https://roopanjayapal899-gif.github.io/VALGAN/landing.html</loc>
+    <priority>1.0</priority>
+</url>
+
 </urlset>
