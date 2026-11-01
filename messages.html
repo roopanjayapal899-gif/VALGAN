@@ -1,16 +1,21 @@
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Messages | VOLGAN</title>
+
+    <title>Postcard | VOLGAN</title>
+
     <link rel="stylesheet" href="messages.css">
 </head>
+
 <body>
 
 <header class="chat-header">
     <a href="index.html" class="logo">VOLGAN</a>
-    <h2>Messages</h2>
+    <h2>💌 Postcard</h2>
 </header>
 
 <main class="chat-container">
@@ -21,7 +26,8 @@
             <input
                 type="search"
                 id="chatSearch"
-                placeholder="Search conversations..."
+                placeholder="Search Mates..."
+                autocomplete="off"
             >
         </div>
 
@@ -32,26 +38,31 @@
     <section id="chatWindow" hidden>
 
         <div class="conversation-header">
-            <button id="backButton">←</button>
+
+            <button id="backButton" type="button">←</button>
 
             <div>
                 <h3 id="chatUsername">User</h3>
                 <small id="chatStatus">Offline</small>
             </div>
+
         </div>
 
         <div id="messageList" class="message-list"></div>
 
         <form id="messageForm">
+
             <input
                 type="text"
                 id="messageInput"
-                placeholder="Write a message..."
+                placeholder="Write a Postcard..."
                 autocomplete="off"
+                maxlength="2000"
                 required
             >
 
             <button type="submit">Send</button>
+
         </form>
 
     </section>
@@ -59,13 +70,17 @@
 </main>
 
 <nav class="bottom-nav">
+
     <a href="index.html">⌂<span>Home</span></a>
-    <a href="friends.html">♧<span>Friends</span></a>
+    <a href="friends.html">♧<span>Mates</span></a>
     <a href="create-post.html">＋<span>Create</span></a>
     <a href="search.html">⌕<span>Search</span></a>
     <a href="profile.html">◉<span>Profile</span></a>
+
 </nav>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script>
 <script src="messages.js" defer></script>
 
 </body>
