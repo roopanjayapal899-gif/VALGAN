@@ -1,6 +1,7 @@
-// ======================================
-// VOLGAN - FORGOT PASSWORD
-// ======================================
+
+ // ======================================
+ // VOLGAN - FORGOT PASSWORD
+ // ======================================
 
 const forgotForm = document.getElementById("forgotForm");
 const emailInput = document.getElementById("email");
@@ -24,10 +25,8 @@ forgotForm.addEventListener("submit", async (event) => {
 
     try {
 
-        const redirectURL = new URL(
-            "reset-password.html",
-            window.location.href
-        ).href;
+        const redirectURL =
+            "https://roopanjayapal899-gif.github.io/VALGAN/reset-password.html";
 
         const { error } =
             await supabaseClient.auth.resetPasswordForEmail(
@@ -37,12 +36,10 @@ forgotForm.addEventListener("submit", async (event) => {
                 }
             );
 
-        if (error) {
-            throw error;
-        }
+        if (error) throw error;
 
         message.textContent =
-            "If an account exists for this email, a password reset link has been sent. Please check your inbox.";
+            "Password reset link sent. Please check your email.";
 
         message.style.color = "green";
 
@@ -57,9 +54,11 @@ forgotForm.addEventListener("submit", async (event) => {
 
         message.style.color = "red";
 
-    }
+    } finally {
 
-    resetButton.disabled = false;
-    resetButton.textContent = "Send Reset Link";
+        resetButton.disabled = false;
+        resetButton.textContent = "Send Reset Link";
+
+    }
 
 });
