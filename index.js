@@ -1,7 +1,7 @@
 
 // ======================================
 // VOLGAN HOME PAGE
-// PUBLIC FEED + CREATE + EDIT + DELETE
+// PUBLIC FEED + INLINE EDIT + DELETE
 // ======================================
 
 const userAvatar = document.getElementById("userAvatar");
@@ -45,10 +45,7 @@ async function getImageURL(bucket, path) {
 // ======================================
 
 async function initializeHomePage() {
-    if (!feedContainer) {
-        console.error("feedContainer not found.");
-        return;
-    }
+    if (!feedContainer) return;
 
     if (typeof supabaseClient === "undefined") {
         feedContainer.textContent = "Supabase connection failed.";
@@ -70,37 +67,34 @@ async function initializeHomePage() {
 
         const metadata = currentUser.user_metadata || {};
 
-const fullName =
-    metadata.full_name ||
-    metadata.name ||
-    metadata.username ||
-    "VOLGAN User";
+        const fullName =
+            metadata.full_name ||
+            metadata.name ||
+            metadata.username ||
+            "VOLGAN User";
 
         if (userAvatar) {
-    userAvatar.textContent =
-        fullName.charAt(0).toUpperCase();
+            userAvatar.textContent =
+                fullName.charAt(0).toUpperCase();
 
-    const avatarPath = metadata.avatar_path;
+            if (metadata.avatar_path) {
+                const avatarURL = await getImageURL(
+                    PROFILE_BUCKET,
+                    metadata.avatar_path
+                );
 
-    if (avatarPath) {
-        const avatarURL = await getImageURL(
-            PROFILE_BUCKET,
-            avatarPath
-        );
+                if (avatarURL) {
+                    const img = document.createElement("img");
+                    img.src = avatarURL;
+                    img.alt = fullName;
+                    img.style.width = "100%";
+                    img.style.height = "100%";
+                    img.style.objectFit = "cover";
+                    img.style.borderRadius = "50%";
 
-        if (avatarURL) {
-            const avatarImage = document.createElement("img");
-
-            avatarImage.src = avatarURL;
-            avatarImage.alt = "My Profile";
-            avatarImage.style.width = "100%";
-            avatarImage.style.height = "100%";
-            avatarImage.style.objectFit = "cover";
-            avatarImage.style.borderRadius = "50%";
-
-            userAvatar.replaceChildren(avatarImage);
-        }
-    }
+                    userAvatar.replaceChildren(img);
+                }
+            }
         }
 
         await loadFeed();
@@ -108,7 +102,7 @@ const fullName =
     } catch (error) {
         console.error("Home Initialization Error:", error);
         feedContainer.textContent =
-            "Unable to load VOLGAN. Please refresh.";
+            "Unable to load VOLGAN: " + error.message;
     }
 }
 
@@ -119,7 +113,7 @@ const fullName =
 async function loadFeed() {
     if (!currentUser || !feedContainer) return;
 
-    feedContainer.textContent = "Loading posts...";
+    feedContainer.textContent = "Loading Moments...";
 
     try {
         const { data: posts, error } = await supabaseClient
@@ -133,100 +127,84 @@ async function loadFeed() {
         if (!posts || posts.length === 0) {
             feedContainer.replaceChildren();
 
-            const emptyMessage = document.createElement("div");
-            emptyMessage.className = "empty-feed";
-
-            const icon = document.createElement("div");
-            icon.className = "empty-icon";
-            icon.textContent = "🌊";
+            const empty = document.createElement("div");
+            empty.className = "empty-feed";
 
             const heading = document.createElement("h3");
-            heading.textContent =
-                "Your VOLGAN journey starts here!";
+            heading.textContent = "Your VOLGAN journey starts here!";
 
             const description = document.createElement("p");
             description.textContent =
-                "Posts from your community will appear here.";
+                "Moments from your community will appear here.";
 
-            emptyMessage.append(icon, heading, description);
-            feedContainer.appendChild(emptyMessage);
-
+            empty.append(heading, description);
+            feedContainer.appendChild(empty);
             return;
         }
 
-        // GET USER PROFILES
-        const userIds = [
-            ...new Set(posts.map(post => post.user_id))
-        ];
+        const userIds = [...new Set(posts.map(post => post.user_id))];
 
         const { data: profiles, error: profileError } =
             await supabaseClient
                 .from("profiles")
-                .select("id, full_name, avatar_path")
+                .select("id, full_name, username, avatar_path")
                 .in("id", userIds);
 
         if (profileError) throw profileError;
 
         const profileMap = new Map(
-            (profiles || []).map(profile => [
-                profile.id,
-                profile
-            ])
+            (profiles || []).map(profile => [profile.id, profile])
         );
 
-        const filter = feedFilter?.value || "all";
+        const visiblePosts = [...posts];
 
-        let visiblePosts = [...posts];
-
-        if (filter === "latest") {
+        if (feedFilter?.value === "latest") {
             visiblePosts.sort(
-                (a, b) =>
-                    new Date(b.created_at) -
-                    new Date(a.created_at)
+                (a, b) => new Date(b.created_at) - new Date(a.created_at)
             );
         }
 
         feedContainer.replaceChildren();
 
-        // DISPLAY POSTS
         for (const post of visiblePosts) {
-
             const profile = profileMap.get(post.user_id);
+            const isOwnPost = post.user_id === currentUser.id;
+
+            const metadata = isOwnPost
+                ? currentUser.user_metadata || {}
+                : {};
 
             const fullName =
-                profile?.full_name || "VOLGAN User";
+                profile?.full_name ||
+                metadata.full_name ||
+                metadata.name ||
+                profile?.username ||
+                "VOLGAN User";
 
-            const postCard = document.createElement("article");
-            postCard.className = "volgan-post-card";
+            const avatarPath =
+                profile?.avatar_path ||
+                (isOwnPost ? metadata.avatar_path : null);
 
-            // ----------------------------------
-            // POST HEADER
-            // ----------------------------------
+            const card = document.createElement("article");
+            card.className = "volgan-post-card";
 
+            // HEADER
             const header = document.createElement("div");
             header.className = "volgan-post-header";
 
             const avatar = document.createElement("div");
             avatar.className = "volgan-post-avatar";
-            avatar.textContent =
-                fullName.charAt(0).toUpperCase();
+            avatar.textContent = fullName.charAt(0).toUpperCase();
 
-            if (profile?.avatar_path) {
-                const avatarURL = await getImageURL(
-                    PROFILE_BUCKET,
-                    profile.avatar_path
-                );
+            if (avatarPath) {
+                const url = await getImageURL(PROFILE_BUCKET, avatarPath);
 
-                if (avatarURL) {
-                    const avatarImage =
-                        document.createElement("img");
-
-                    avatarImage.src = avatarURL;
-                    avatarImage.alt = fullName;
-                    avatarImage.className =
-                        "volgan-avatar-image";
-
-                    avatar.replaceChildren(avatarImage);
+                if (url) {
+                    const img = document.createElement("img");
+                    img.src = url;
+                    img.alt = fullName;
+                    img.className = "volgan-avatar-image";
+                    avatar.replaceChildren(img);
                 }
             }
 
@@ -235,82 +213,37 @@ async function loadFeed() {
 
             header.append(avatar, name);
 
-            // ----------------------------------
-            // THREE DOT MENU - OWN POSTS ONLY
-            // ----------------------------------
+            // THREE DOT MENU
+            if (isOwnPost) {
+                const wrapper = document.createElement("div");
+                wrapper.className = "post-menu-wrapper";
+                wrapper.style.marginLeft = "auto";
+                wrapper.style.position = "relative";
 
-            if (post.user_id === currentUser.id) {
-
-                const menuWrapper =
-                    document.createElement("div");
-
-                menuWrapper.className = "post-menu-wrapper";
-
-                menuWrapper.style.marginLeft = "auto";
-                menuWrapper.style.position = "relative";
-
-                const menuButton =
-                    document.createElement("button");
-
+                const menuButton = document.createElement("button");
                 menuButton.type = "button";
                 menuButton.textContent = "⋯";
                 menuButton.className = "post-menu-button";
-                menuButton.setAttribute(
-                    "aria-label",
-                    "Post options"
-                );
-
-                menuButton.style.border = "none";
-                menuButton.style.background = "transparent";
-                menuButton.style.fontSize = "26px";
-                menuButton.style.cursor = "pointer";
 
                 const menu = document.createElement("div");
                 menu.className = "post-menu";
                 menu.hidden = true;
 
-                menu.style.position = "absolute";
-                menu.style.right = "0";
-                menu.style.top = "35px";
-                menu.style.zIndex = "100";
-                menu.style.minWidth = "140px";
-                menu.style.background = "#ffffff";
-                menu.style.border = "1px solid #dddddd";
-                menu.style.borderRadius = "8px";
-                menu.style.boxShadow =
-                    "0 4px 12px rgba(0,0,0,0.15)";
+                const editButton = document.createElement("button");
+                editButton.type = "button";
+                editButton.textContent = "Edit Moment";
 
-                function createMenuItem(label, color) {
-                    const button =
-                        document.createElement("button");
-
-                    button.type = "button";
-                    button.textContent = label;
-                    button.style.display = "block";
-                    button.style.width = "100%";
-                    button.style.padding = "12px";
-                    button.style.border = "none";
-                    button.style.background = "#ffffff";
-                    button.style.textAlign = "left";
-                    button.style.cursor = "pointer";
-                    button.style.color = color || "#222222";
-
-                    return button;
-                }
-
-                const editButton =
-                    createMenuItem("Edit Post");
-
-                const deleteButton =
-                    createMenuItem("Delete Post", "#dc2626");
+                const deleteButton = document.createElement("button");
+                deleteButton.type = "button";
+                deleteButton.textContent = "Delete Moment";
 
                 menuButton.addEventListener("click", () => {
                     menu.hidden = !menu.hidden;
                 });
 
-                editButton.addEventListener("click", async () => {
+                editButton.addEventListener("click", () => {
                     menu.hidden = true;
-                    await editPost(post);
+                    openInlineEditor(post, card);
                 });
 
                 deleteButton.addEventListener("click", async () => {
@@ -319,131 +252,295 @@ async function loadFeed() {
                 });
 
                 menu.append(editButton, deleteButton);
-
-                menuWrapper.append(menuButton, menu);
-                header.appendChild(menuWrapper);
+                wrapper.append(menuButton, menu);
+                header.appendChild(wrapper);
             }
 
-            postCard.appendChild(header);
+            card.appendChild(header);
 
+            // DATE AND TIME
+            const date = document.createElement("small");
+            date.className = "volgan-post-date";
+            date.textContent = new Date(post.created_at).toLocaleString(
+                "en-IN",
+                {
+                    day: "2-digit",
+                    month: "short",
+                    year: "numeric",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    hour12: true
+                }
+            );
+            card.appendChild(date);
 
-            // POST DATE AND TIME
-const postDate = document.createElement("small");
-postDate.className = "volgan-post-date";
-
-postDate.textContent = new Date(
-    post.created_at
-).toLocaleString("en-IN", {
-    day: "2-digit",
-    month: "short",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: true
-});
-
-postCard.appendChild(postDate);
-
-            // ----------------------------------
-            // POST TEXT
-            // ----------------------------------
-
-            if (post.content && post.content.trim()) {
+            // TEXT
+            if (post.content?.trim()) {
                 const content = document.createElement("p");
-
                 content.className = "volgan-post-content";
                 content.textContent = post.content;
-
-                postCard.appendChild(content);
+                card.appendChild(content);
             }
 
-            // ----------------------------------
-            // POST IMAGE
-            // ----------------------------------
-
+            // IMAGE
             if (post.image_url) {
-
-                const imageURL = await getImageURL(
+                const url = await getImageURL(
                     IMAGE_BUCKET,
                     post.image_url
                 );
 
-                if (imageURL) {
-                    const image =
-                        document.createElement("img");
-
-                    image.src = imageURL;
-                    image.alt = "Post image";
-                    image.className = "volgan-post-image";
-                    image.loading = "lazy";
-
-                    postCard.appendChild(image);
+                if (url) {
+                    const img = document.createElement("img");
+                    img.src = url;
+                    img.alt = "Moment image";
+                    img.className = "volgan-post-image";
+                    img.loading = "lazy";
+                    card.appendChild(img);
                 }
             }
 
-            feedContainer.appendChild(postCard);
+            feedContainer.appendChild(card);
         }
 
     } catch (error) {
         console.error("VOLGAN Feed Error:", error);
-
         feedContainer.textContent =
-            "Unable to load posts. Please try again.";
+            "Unable to load Moments: " + error.message;
     }
 }
 
 // ======================================
-// EDIT POST
+// INLINE EDITOR
 // ======================================
 
-async function editPost(post) {
+function openInlineEditor(post, card) {
+    if (!currentUser || post.user_id !== currentUser.id) return;
 
-    if (!currentUser || post.user_id !== currentUser.id) {
-        alert("You cannot edit this post.");
-        return;
+    if (card.querySelector(".inline-edit-panel")) return;
+
+    const editor = document.createElement("section");
+    editor.className = "inline-edit-panel";
+    editor.style.padding = "16px";
+    editor.style.marginTop = "15px";
+    editor.style.border = "1px solid #ddd";
+    editor.style.borderRadius = "12px";
+
+    const heading = document.createElement("h3");
+    heading.textContent = "Edit Moment";
+
+    const textarea = document.createElement("textarea");
+    textarea.value = post.content || "";
+    textarea.maxLength = 2000;
+    textarea.rows = 5;
+    textarea.style.width = "100%";
+    textarea.style.boxSizing = "border-box";
+
+    const preview = document.createElement("img");
+    preview.style.width = "100%";
+    preview.style.maxHeight = "300px";
+    preview.style.objectFit = "contain";
+    preview.hidden = true;
+
+    const status = document.createElement("p");
+
+    const fileInput = document.createElement("input");
+    fileInput.type = "file";
+    fileInput.accept = "image/jpeg,image/png,image/webp";
+    fileInput.hidden = true;
+
+    const changeButton = document.createElement("button");
+    changeButton.type = "button";
+    changeButton.textContent = "📷 Change Photo";
+
+    const removeButton = document.createElement("button");
+    removeButton.type = "button";
+    removeButton.textContent = "Remove Photo";
+
+    let selectedFile = null;
+    let removeExistingImage = false;
+    let objectURL = null;
+
+    if (post.image_url) {
+        getImageURL(IMAGE_BUCKET, post.image_url).then(url => {
+            if (url && !selectedFile && !removeExistingImage) {
+                preview.src = url;
+                preview.hidden = false;
+            }
+        });
     }
 
-    const newContent = prompt(
-        "Edit your post:",
-        post.content || ""
-    );
+    changeButton.addEventListener("click", () => fileInput.click());
 
-    if (newContent === null) return;
+    fileInput.addEventListener("change", () => {
+        const file = fileInput.files?.[0];
+        if (!file) return;
 
-    if (!newContent.trim() && !post.image_url) {
-        alert("Post cannot be empty.");
-        return;
-    }
-
-    if (newContent.length > 2000) {
-        alert("Post cannot exceed 2000 characters.");
-        return;
-    }
-
-    try {
-        const { data, error } = await supabaseClient
-            .from("posts")
-            .update({
-                content: newContent.trim()
-            })
-            .eq("id", post.id)
-            .eq("user_id", currentUser.id)
-            .select("id");
-
-        if (error) throw error;
-
-        if (!data || data.length === 0) {
-            throw new Error("Post was not updated.");
+        if (!["image/jpeg", "image/png", "image/webp"].includes(file.type)) {
+            alert("Choose JPG, PNG or WebP.");
+            fileInput.value = "";
+            return;
         }
 
-        alert("Post updated successfully!");
+        if (file.size > 10 * 1024 * 1024) {
+            alert("Image must be smaller than 10 MB.");
+            fileInput.value = "";
+            return;
+        }
 
-        await loadFeed();
+        selectedFile = file;
+        removeExistingImage = false;
 
-    } catch (error) {
-        console.error("Edit Post Error:", error);
-        alert(error.message || "Unable to edit post.");
-    }
+        if (objectURL) URL.revokeObjectURL(objectURL);
+
+        objectURL = URL.createObjectURL(file);
+        preview.src = objectURL;
+        preview.hidden = false;
+        status.textContent = "New photo selected.";
+    });
+
+    removeButton.addEventListener("click", () => {
+        selectedFile = null;
+        removeExistingImage = true;
+        fileInput.value = "";
+        preview.removeAttribute("src");
+        preview.hidden = true;
+        status.textContent = "Photo will be removed when saved.";
+    });
+
+    const saveButton = document.createElement("button");
+    saveButton.type = "button";
+    saveButton.textContent = "Save Changes";
+
+    const cancelButton = document.createElement("button");
+    cancelButton.type = "button";
+    cancelButton.textContent = "Cancel";
+
+    const buttons = document.createElement("div");
+    buttons.append(saveButton, cancelButton);
+
+    editor.append(
+        heading,
+        textarea,
+        changeButton,
+        removeButton,
+        fileInput,
+        preview,
+        status,
+        buttons
+    );
+
+    card.appendChild(editor);
+
+    cancelButton.addEventListener("click", () => {
+        if (objectURL) URL.revokeObjectURL(objectURL);
+        editor.remove();
+    });
+
+    saveButton.addEventListener("click", async () => {
+        const newContent = textarea.value.trim();
+
+        const hasImageAfterSave = selectedFile
+            ? true
+            : removeExistingImage
+                ? false
+                : Boolean(post.image_url);
+
+        if (!newContent && !hasImageAfterSave) {
+            alert("Moment cannot be empty.");
+            return;
+        }
+
+        saveButton.disabled = true;
+        cancelButton.disabled = true;
+        saveButton.textContent = "Saving...";
+
+        let newPath = null;
+
+        try {
+            let updatedImagePath = post.image_url;
+
+            // UPLOAD NEW IMAGE
+            if (selectedFile) {
+                const extension =
+                    selectedFile.type === "image/png" ? "png" :
+                    selectedFile.type === "image/webp" ? "webp" : "jpg";
+
+                newPath =
+                    currentUser.id + "/" +
+                    crypto.randomUUID() + "." + extension;
+
+                const { error: uploadError } =
+                    await supabaseClient.storage
+                        .from(IMAGE_BUCKET)
+                        .upload(newPath, selectedFile, {
+                            cacheControl: "3600",
+                            upsert: false,
+                            contentType: selectedFile.type
+                        });
+
+                if (uploadError) throw uploadError;
+
+                updatedImagePath = newPath;
+            }
+
+            if (removeExistingImage && !selectedFile) {
+                updatedImagePath = null;
+            }
+
+            // UPDATE POST
+            const { data, error } = await supabaseClient
+                .from("posts")
+                .update({
+                    content: newContent,
+                    image_url: updatedImagePath
+                })
+                .eq("id", post.id)
+                .eq("user_id", currentUser.id)
+                .select("id");
+
+            if (error) throw error;
+
+            if (!data || data.length === 0) {
+                throw new Error("Moment was not updated.");
+            }
+
+            // DELETE OLD IMAGE AFTER SUCCESSFUL UPDATE
+            if (
+                post.image_url &&
+                (selectedFile || removeExistingImage) &&
+                !post.image_url.startsWith("http") &&
+                post.image_url.startsWith(currentUser.id + "/")
+            ) {
+                const { error: removeError } =
+                    await supabaseClient.storage
+                        .from(IMAGE_BUCKET)
+                        .remove([post.image_url]);
+
+                if (removeError) {
+                    console.error("Old image cleanup error:", removeError);
+                }
+            }
+
+            if (objectURL) URL.revokeObjectURL(objectURL);
+
+            alert("Moment updated successfully!");
+            await loadFeed();
+
+        } catch (error) {
+            if (newPath) {
+                await supabaseClient.storage
+                    .from(IMAGE_BUCKET)
+                    .remove([newPath]);
+            }
+
+            console.error("Inline Edit Error:", error);
+            alert(error.message || "Unable to update Moment.");
+
+            saveButton.disabled = false;
+            cancelButton.disabled = false;
+            saveButton.textContent = "Save Changes";
+        }
+    });
 }
 
 // ======================================
@@ -451,17 +548,14 @@ async function editPost(post) {
 // ======================================
 
 async function deletePost(post) {
-
     if (!currentUser || post.user_id !== currentUser.id) {
-        alert("You cannot delete this post.");
+        alert("You cannot delete this Moment.");
         return;
     }
 
-    const confirmed = confirm(
-        "Are you sure you want to delete this post?"
-    );
-
-    if (!confirmed) return;
+    if (!confirm("Are you sure you want to delete this Moment?")) {
+        return;
+    }
 
     try {
         const { data, error } = await supabaseClient
@@ -474,35 +568,30 @@ async function deletePost(post) {
         if (error) throw error;
 
         if (!data || data.length === 0) {
-            throw new Error("Post was not deleted.");
+            throw new Error("Moment was not deleted.");
         }
 
-        // DELETE POST IMAGE FROM STORAGE
         if (
             post.image_url &&
-            !post.image_url.startsWith("http")
+            !post.image_url.startsWith("http") &&
+            post.image_url.startsWith(currentUser.id + "/")
         ) {
             const { error: storageError } =
-                await supabaseClient
-                    .storage
+                await supabaseClient.storage
                     .from(IMAGE_BUCKET)
                     .remove([post.image_url]);
 
             if (storageError) {
-                console.error(
-                    "Storage Image Delete Error:",
-                    storageError
-                );
+                console.error("Image cleanup error:", storageError);
             }
         }
 
-        alert("Post deleted successfully!");
-
+        alert("Moment deleted successfully!");
         await loadFeed();
 
     } catch (error) {
         console.error("Delete Post Error:", error);
-        alert(error.message || "Unable to delete post.");
+        alert(error.message || "Unable to delete Moment.");
     }
 }
 
@@ -514,15 +603,8 @@ function openCreatePost() {
     window.location.href = "create-post.html";
 }
 
-createPostButton?.addEventListener(
-    "click",
-    openCreatePost
-);
-
-textPostButton?.addEventListener(
-    "click",
-    openCreatePost
-);
+createPostButton?.addEventListener("click", openCreatePost);
+textPostButton?.addEventListener("click", openCreatePost);
 
 // ======================================
 // FEED FILTER
@@ -531,7 +613,7 @@ textPostButton?.addEventListener(
 feedFilter?.addEventListener("change", loadFeed);
 
 // ======================================
-// START VOLGAN
+// START
 // ======================================
 
 initializeHomePage();
