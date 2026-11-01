@@ -76,8 +76,30 @@ async function initializeHomePage() {
             "VOLGAN User";
 
         if (userAvatar) {
-            userAvatar.textContent =
-                username.charAt(0).toUpperCase();
+    userAvatar.textContent =
+        username.charAt(0).toUpperCase();
+
+    const avatarPath = metadata.avatar_path;
+
+    if (avatarPath) {
+        const avatarURL = await getImageURL(
+            PROFILE_BUCKET,
+            avatarPath
+        );
+
+        if (avatarURL) {
+            const avatarImage = document.createElement("img");
+
+            avatarImage.src = avatarURL;
+            avatarImage.alt = "My Profile";
+            avatarImage.style.width = "100%";
+            avatarImage.style.height = "100%";
+            avatarImage.style.objectFit = "cover";
+            avatarImage.style.borderRadius = "50%";
+
+            userAvatar.replaceChildren(avatarImage);
+        }
+    }
         }
 
         await loadFeed();
