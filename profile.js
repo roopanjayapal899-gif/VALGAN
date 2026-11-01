@@ -191,6 +191,7 @@ if (profileImageInput) {
             }
 
             currentUser = data.user;
+            await syncProfileToTable();
 
             // Show uploaded image
             await loadProfileImage(imagePath);
