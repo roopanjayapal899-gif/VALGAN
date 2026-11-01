@@ -85,9 +85,10 @@ async function loadFeed() {
 
     try {
         const { data: posts, error } = await supabaseClient
-            .from("posts")
-            .select("id, user_id, content, image_url, created_at")
-            .order("created_at", { ascending: false });
+    .from("posts")
+    .select("id, user_id, content, image_url, created_at")
+    .order("created_at", { ascending: false })
+    .limit(30);
 
         if (error) throw error;
 
