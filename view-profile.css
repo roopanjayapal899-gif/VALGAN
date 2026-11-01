@@ -1,3 +1,4 @@
+
 * {
     margin: 0;
     padding: 0;
@@ -76,7 +77,7 @@ body {
     overflow-wrap: anywhere;
 }
 
-/* ACTION BUTTONS */
+/* MATE / UNMATE BUTTONS */
 
 .profile-actions {
     display: flex;
@@ -93,6 +94,11 @@ body {
     font-size: 14px;
     font-weight: bold;
     cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.profile-actions button:active {
+    transform: scale(0.96);
 }
 
 #friendButton {
@@ -100,12 +106,36 @@ body {
     color: white;
 }
 
+#friendButton:hover {
+    background: #06676d;
+}
+
+#friendButton.unmate {
+    background: #e8eeee;
+    color: #344b50;
+    border: 1px solid #cbd5d8;
+}
+
+#friendButton.unmate:hover {
+    background: #dce5e5;
+}
+
+#friendButton:disabled,
+#blockButton:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
 #blockButton {
     background: #ffe5e5;
     color: #c62828;
 }
 
-/* POSTS */
+#blockButton:hover {
+    background: #ffd0d0;
+}
+
+/* MOMENTS */
 
 .public-posts {
     margin-top: 25px;
