@@ -62,6 +62,7 @@ async function loadProfile() {
         }
 
         currentUser = session.user;
+        await syncProfileToTable();
 
         const metadata = currentUser.user_metadata || {};
 
