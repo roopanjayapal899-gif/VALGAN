@@ -1,5 +1,6 @@
+
 // ======================================
-// VOLGAN - FRIENDS SYSTEM V1
+// VOLGAN - MATE SYSTEM
 // ======================================
 
 const userSearch = document.getElementById("userSearch");
@@ -78,12 +79,14 @@ async function checkLogin() {
 // ======================================
 
 async function getProfiles(userIds) {
-    if (!userIds.length) return [];
+    const uniqueIds = [...new Set(userIds)];
+
+    if (!uniqueIds.length) return [];
 
     const { data, error } = await supabaseClient
         .from("profiles")
         .select("id, username, full_name")
-        .in("id", userIds);
+        .in("id", uniqueIds);
 
     if (error) {
         console.error("Profiles error:", error);
@@ -169,7 +172,7 @@ async function searchUsers() {
         .limit(20);
 
     if (error) {
-        console.error(error);
+        console.error("User search error:", error);
         showMessage("User search failed.");
         return;
     }
@@ -181,8 +184,8 @@ async function searchUsers() {
 
     for (const user of data) {
         const button = createButton(
-            "Add Friend",
-            () => sendFriendRequest(user.id, button)
+            "+ Mate",
+            () => sendMateRequest(user.id, button)
         );
 
         usersContainer.appendChild(
@@ -195,42 +198,75 @@ async function searchUsers() {
 
 
 // ======================================
-// SEND FRIEND REQUEST
+// SEND MATE REQUEST
 // ======================================
 
-async function sendFriendRequest(receiverId, button) {
+async function sendMateRequest(receiverId, button) {
     button.disabled = true;
     button.textContent = "Sending...";
 
-    const { error } = await supabaseClient
-        .from("friend_requests")
-        .insert({
-            sender_id: currentUser.id,
-            receiver_id: receiverId,
-            status: "pending"
-        });
+    try {
+        const { data: existing, error: checkError } =
+            await supabaseClient
+                .from("friend_requests")
+                .select("id, sender_id, receiver_id, status")
+                .or(
+                    `and(sender_id.eq.${currentUser.id},receiver_id.eq.${receiverId}),and(sender_id.eq.${receiverId},receiver_id.eq.${currentUser.id})`
+                );
 
-    if (error) {
-        console.error("Friend request error:", error);
+        if (checkError) throw checkError;
 
-        button.textContent = "Add Friend";
+        const request = existing?.[0];
+
+        if (request?.status === "accepted") {
+            button.textContent = "✓ Mate";
+            return;
+        }
+
+        if (request?.status === "pending") {
+            if (request.sender_id === currentUser.id) {
+                button.textContent = "Request Sent";
+            } else {
+                button.textContent = "Accept Mate";
+            }
+            return;
+        }
+
+        if (request?.status === "rejected") {
+            const { error: deleteError } = await supabaseClient
+                .from("friend_requests")
+                .delete()
+                .eq("id", request.id);
+
+            if (deleteError) throw deleteError;
+        }
+
+        const { error } = await supabaseClient
+            .from("friend_requests")
+            .insert({
+                sender_id: currentUser.id,
+                receiver_id: receiverId,
+                status: "pending"
+            });
+
+        if (error) throw error;
+
+        button.textContent = "Request Sent";
+        showMessage("Mate request sent!");
+
+    } catch (error) {
+        console.error("Mate request error:", error);
+
+        button.textContent = "+ Mate";
         button.disabled = false;
 
-        showMessage(
-            "Request failed. It may already exist."
-        );
-
-        return;
+        showMessage(error.message || "Mate request failed.");
     }
-
-    button.textContent = "Request Sent";
-
-    showMessage("Friend request sent!");
 }
 
 
 // ======================================
-// LOAD FRIEND REQUESTS
+// LOAD MATE REQUESTS
 // ======================================
 
 async function loadRequests() {
@@ -243,12 +279,12 @@ async function loadRequests() {
         .eq("status", "pending");
 
     if (error) {
-        console.error("Requests error:", error);
+        console.error("Mate requests error:", error);
 
         requestsContainer.appendChild(
             createTextElement(
                 "p",
-                "Could not load requests."
+                "Could not load Mate requests."
             )
         );
 
@@ -259,7 +295,7 @@ async function loadRequests() {
         requestsContainer.appendChild(
             createTextElement(
                 "p",
-                "No pending friend requests."
+                "No pending Mate requests."
             )
         );
 
@@ -280,9 +316,10 @@ async function loadRequests() {
         if (!user) continue;
 
         const actions = document.createElement("div");
+        actions.className = "user-actions";
 
         const acceptButton = createButton(
-            "Accept",
+            "Accept Mate",
             () => updateRequest(request.id, "accepted")
         );
 
@@ -293,46 +330,48 @@ async function loadRequests() {
 
         actions.append(acceptButton, rejectButton);
 
-        const card = createUserCard(user, actions);
-
-        requestsContainer.appendChild(card);
+        requestsContainer.appendChild(
+            createUserCard(user, actions)
+        );
     }
 }
 
 
 // ======================================
-// ACCEPT / REJECT REQUEST
+// ACCEPT / REJECT MATE REQUEST
 // ======================================
 
 async function updateRequest(requestId, status) {
-    const { error } = await supabaseClient
-        .from("friend_requests")
-        .update({ status: status })
-        .eq("id", requestId);
+    try {
+        const { error } = await supabaseClient
+            .from("friend_requests")
+            .update({ status })
+            .eq("id", requestId)
+            .eq("receiver_id", currentUser.id);
 
-    if (error) {
-        console.error("Update request error:", error);
+        if (error) throw error;
 
         showMessage(
-            "Could not update friend request."
+            status === "accepted"
+                ? "You are now Mates!"
+                : "Mate request rejected."
         );
 
-        return;
+        await loadRequests();
+        await loadFriends();
+
+    } catch (error) {
+        console.error("Update Mate request error:", error);
+
+        showMessage(
+            error.message || "Could not update Mate request."
+        );
     }
-
-    showMessage(
-        status === "accepted"
-            ? "Friend request accepted!"
-            : "Friend request rejected."
-    );
-
-    await loadRequests();
-    await loadFriends();
 }
 
 
 // ======================================
-// LOAD MY FRIENDS
+// LOAD MY MATES
 // ======================================
 
 async function loadFriends() {
@@ -347,12 +386,12 @@ async function loadFriends() {
         );
 
     if (error) {
-        console.error("Friends error:", error);
+        console.error("Mates error:", error);
 
         myFriendsContainer.appendChild(
             createTextElement(
                 "p",
-                "Could not load friends."
+                "Could not load Mates."
             )
         );
 
@@ -363,34 +402,100 @@ async function loadFriends() {
         myFriendsContainer.appendChild(
             createTextElement(
                 "p",
-                "You have no friends yet."
+                "You have no Mates yet."
             )
         );
 
         return;
     }
 
-    const friendIds = data.map(request =>
+    const mateIds = data.map(request =>
         request.sender_id === currentUser.id
             ? request.receiver_id
             : request.sender_id
     );
 
-    const profiles = await getProfiles(friendIds);
+    const profiles = await getProfiles(mateIds);
 
-    for (const friend of profiles) {
+    const profileMap = new Map(
+        profiles.map(profile => [profile.id, profile])
+    );
+
+    for (const request of data) {
+        const mateId =
+            request.sender_id === currentUser.id
+                ? request.receiver_id
+                : request.sender_id;
+
+        const mate = profileMap.get(mateId);
+
+        if (!mate) continue;
+
+        const actions = document.createElement("div");
+        actions.className = "user-actions";
+
         const viewButton = createButton(
             "View Profile",
             () => {
                 window.location.href =
                     "view-profile.html?id=" +
-                    encodeURIComponent(friend.id);
+                    encodeURIComponent(mate.id);
             }
         );
 
-        myFriendsContainer.appendChild(
-            createUserCard(friend, viewButton)
+        const unmateButton = createButton(
+            "Unmate",
+            () => unmateUser(request.id, mate, unmateButton)
         );
+
+        actions.append(viewButton, unmateButton);
+
+        myFriendsContainer.appendChild(
+            createUserCard(mate, actions)
+        );
+    }
+}
+
+
+// ======================================
+// UNMATE
+// ======================================
+
+async function unmateUser(requestId, mate, button) {
+    const mateName = mate.full_name || mate.username || "this user";
+
+    if (!confirm(`Are you sure you want to Unmate ${mateName}?`)) {
+        return;
+    }
+
+    button.disabled = true;
+    button.textContent = "Removing...";
+
+    try {
+        const { data, error } = await supabaseClient
+            .from("friend_requests")
+            .delete()
+            .eq("id", requestId)
+            .eq("status", "accepted")
+            .select("id");
+
+        if (error) throw error;
+
+        if (!data || data.length === 0) {
+            throw new Error("Mate connection could not be removed.");
+        }
+
+        showMessage("Mate removed successfully!");
+
+        await loadFriends();
+
+    } catch (error) {
+        console.error("Unmate error:", error);
+
+        showMessage(error.message || "Unable to Unmate.");
+
+        button.disabled = false;
+        button.textContent = "Unmate";
     }
 }
 
@@ -399,10 +504,7 @@ async function loadFriends() {
 // BUTTON EVENTS
 // ======================================
 
-searchButton.addEventListener(
-    "click",
-    searchUsers
-);
+searchButton.addEventListener("click", searchUsers);
 
 userSearch.addEventListener("keydown", event => {
     if (event.key === "Enter") {
