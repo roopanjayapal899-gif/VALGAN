@@ -12,7 +12,6 @@ const textPostButton = document.getElementById("textPostButton");
 
 const IMAGE_BUCKET = "post-images";
 const PROFILE_BUCKET = "profile-images";
-let currentUser = null;
 
 // ======================================
 // IMAGE URL HELPER
