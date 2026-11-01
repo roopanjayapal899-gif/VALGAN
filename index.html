@@ -1,43 +1,53 @@
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>VOLGAN — Home</title>
+    <meta name="theme-color" content="#ffffff">
+
+    <title>VOLGAN — World</title>
 
     <link rel="stylesheet" href="index.css">
 </head>
 
 <body>
 
-<!-- HEADER -->
-<header class="header">
+    <!-- HEADER -->
+    <header class="header">
 
-    <a href="index.html" class="logo">VOLGAN</a>
+        <a href="index.html" class="logo">VOLGAN</a>
 
-    <a href="search.html" class="header-search" aria-label="Search">
-        🔍
-    </a>
+        <a href="search.html"
+           class="header-search"
+           aria-label="Search">
+            🔍
+        </a>
 
-</header>
+    </header>
+
 
     <!-- MAIN CONTENT -->
     <main class="main-container">
 
-
-        <!-- CREATE MOMENTS -->
-<section class="create-post-card">
+        <!-- CREATE MOMENT -->
+        <section class="create-post-card">
 
             <div class="create-post-top">
 
-                <div class="avatar" id="userAvatar">👤</div>
+                <div class="avatar" id="userAvatar">
+                    👤
+                </div>
 
                 <button
                     id="createPostButton"
                     class="post-prompt"
                     type="button">
+
                     What's happening in your world?
+
                 </button>
 
             </div>
@@ -47,35 +57,55 @@
                 <button
                     id="textPostButton"
                     type="button">
-                    ＋ Create a Moments
+
+                    ＋ Create a Moment
+
                 </button>
 
             </div>
 
         </section>
 
-        <!-- FEED -->
+
+        <!-- WORLD FEED -->
         <section class="feed-section">
 
             <div class="feed-heading">
-                <h2>Your Feed</h2>
 
-                <select id="feedFilter" aria-label="Feed filter">
-                    <option value="all">All Moments</option>
-<option value="latest">Latest Moments</option>
+                <h2>World 🌎</h2>
+
+                <select
+                    id="feedFilter"
+                    aria-label="Feed filter">
+
+                    <option value="all">
+                        All Moments
+                    </option>
+
+                    <option value="latest">
+                        Latest Moments
+                    </option>
+
                 </select>
+
             </div>
 
+
+            <!-- MOMENTS WILL LOAD HERE -->
             <div id="feedContainer">
 
                 <div class="empty-feed">
 
-                    <div class="empty-icon">🌊</div>
+                    <div class="empty-icon">
+                        🌊
+                    </div>
 
-                    <h3>Your VOLGAN journey starts here!</h3>
+                    <h3>
+                        Your VOLGAN journey starts here!
+                    </h3>
 
                     <p>
-    Moments from your community will appear here.
+                        Moments from your community will appear here.
                     </p>
 
                 </div>
@@ -86,39 +116,57 @@
 
     </main>
 
+
     <!-- BOTTOM NAVIGATION -->
     <nav class="bottom-navigation">
 
         <a href="index.html" class="active">
+
             <span>⌂</span>
-            <small>Home</small>
+            <small>World</small>
+
         </a>
+
 
         <a href="friends.html">
+
             <span>♧</span>
             <small>Friends</small>
+
         </a>
+
 
         <a href="create-post.html" class="create-button">
+
             <span>＋</span>
             <small>Create</small>
+
         </a>
+
 
         <a href="messages.html">
+
             <span>✉</span>
-            <small>Messages</small>
+            <small>Postcard</small>
+
         </a>
 
+
         <a href="profile.html">
+
             <span>○</span>
             <small>Profile</small>
+
         </a>
 
     </nav>
 
+
     <!-- SCRIPTS -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
     <script src="supabase.js"></script>
+
     <script src="index.js" defer></script>
 
 </body>
