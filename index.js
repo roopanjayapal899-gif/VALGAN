@@ -60,6 +60,7 @@ async function initializeHomePage() {
         }
 
         const user = data.session.user;
+        const user = currentUser;
         const metadata = user.user_metadata || {};
 
         const username =
