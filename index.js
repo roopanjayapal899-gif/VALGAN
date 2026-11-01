@@ -78,7 +78,7 @@ const fullName =
 
         if (userAvatar) {
     userAvatar.textContent =
-        username.charAt(0).toUpperCase();
+        fullName.charAt(0).toUpperCase();
 
     const avatarPath = metadata.avatar_path;
 
