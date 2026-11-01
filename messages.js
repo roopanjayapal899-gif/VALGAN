@@ -1,6 +1,8 @@
 
+// ============================================
 // VOLGAN - POSTCARD MESSAGING
-// Supabase based private messaging between Mates
+// Supabase Private Messaging
+// ============================================
 
 let currentUser = null;
 let activeChat = null;
@@ -18,9 +20,13 @@ const messageList = document.getElementById("messageList");
 const messageForm = document.getElementById("messageForm");
 const messageInput = document.getElementById("messageInput");
 
-// Get logged-in user
+// ============================================
+// CHECK LOGIN
+// ============================================
+
 async function checkLogin() {
-    const { data, error } = await supabaseClient.auth.getSession();
+    const { data, error } =
+        await supabaseClient.auth.getSession();
 
     if (error || !data.session) {
         window.location.replace("./login.html");
@@ -31,7 +37,10 @@ async function checkLogin() {
     return true;
 }
 
-// Get profile details
+// ============================================
+// GET PROFILES
+// ============================================
+
 async function getProfiles(userIds) {
     if (!userIds.length) return {};
 
@@ -56,7 +65,10 @@ async function getProfiles(userIds) {
     return profileMap;
 }
 
-// Load profile avatar
+// ============================================
+// GET AVATAR
+// ============================================
+
 async function getAvatar(path) {
     if (!path) return "";
 
@@ -65,12 +77,18 @@ async function getAvatar(path) {
         .from("profile-images")
         .createSignedUrl(path, 3600);
 
-    if (error) return "";
+    if (error) {
+        console.error("Avatar error:", error);
+        return "";
+    }
 
     return data.signedUrl;
 }
 
-// Load accepted Mates
+// ============================================
+// LOAD ACCEPTED MATES
+// ============================================
+
 async function loadMates() {
     const { data, error } = await supabaseClient
         .from("friend_requests")
@@ -82,7 +100,8 @@ async function loadMates() {
 
     if (error) {
         console.error("Mate loading error:", error);
-        chatList.innerHTML = "<p>Unable to load Mates.</p>";
+        chatList.innerHTML =
+            "<p class='empty-message'>Unable to load Mates.</p>";
         return;
     }
 
@@ -106,7 +125,10 @@ async function loadMates() {
     await loadInbox();
 }
 
-// Load recent messages
+// ============================================
+// LOAD INBOX
+// ============================================
+
 async function loadInbox() {
     const { data, error } = await supabaseClient
         .from("messages")
@@ -118,48 +140,65 @@ async function loadInbox() {
 
     if (error) {
         console.error("Inbox error:", error);
-        chatList.innerHTML = "<p>Unable to load Postcards.</p>";
+        chatList.innerHTML =
+            "<p class='empty-message'>Unable to load Postcards.</p>";
         return;
     }
 
     const latestMessages = {};
 
     (data || []).forEach(message => {
-        const otherId = message.sender_id === currentUser.id
-            ? message.receiver_id
-            : message.sender_id;
+        const otherId =
+            message.sender_id === currentUser.id
+                ? message.receiver_id
+                : message.sender_id;
 
         if (!latestMessages[otherId]) {
             latestMessages[otherId] = message;
         }
     });
 
-    renderChatList(latestMessages);
+    await renderChatList(latestMessages);
 }
 
-// Render conversation list
+// ============================================
+// RENDER CHAT LIST
+// ============================================
+
 async function renderChatList(latestMessages = {}) {
     chatList.innerHTML = "";
 
-    const searchText = (chatSearch?.value || "").toLowerCase();
+    const searchText =
+        (chatSearch?.value || "").toLowerCase().trim();
 
     const filteredMates = allMates.filter(mate => {
         const name = mate.profile.full_name || "";
         const username = mate.profile.username || "";
 
-        return name.toLowerCase().includes(searchText) ||
-               username.toLowerCase().includes(searchText);
+        return (
+            name.toLowerCase().includes(searchText) ||
+            username.toLowerCase().includes(searchText)
+        );
     });
 
     if (!filteredMates.length) {
-        chatList.innerHTML = "<p class='empty-message'>No Mates found.</p>";
+        chatList.innerHTML =
+            "<p class='empty-message'>No Mates found.</p>";
         return;
     }
 
     for (const mate of filteredMates) {
         const profile = mate.profile;
-        const name = profile.full_name || profile.username || "Mate";
-        const username = profile.username ? "@" + profile.username : "";
+
+        const name =
+            profile.full_name ||
+            profile.username ||
+            "Mate";
+
+        const username = profile.username
+            ? "@" + profile.username
+            : "";
+
         const latest = latestMessages[mate.id];
 
         const card = document.createElement("div");
@@ -170,11 +209,13 @@ async function renderChatList(latestMessages = {}) {
         avatar.textContent = name.charAt(0).toUpperCase();
 
         if (profile.avatar_path) {
-            const avatarUrl = await getAvatar(profile.avatar_path);
+            const avatarUrl =
+                await getAvatar(profile.avatar_path);
 
             if (avatarUrl) {
                 avatar.textContent = "";
-                avatar.style.backgroundImage = `url("${avatarUrl}")`;
+                avatar.style.backgroundImage =
+                    `url("${avatarUrl}")`;
                 avatar.style.backgroundSize = "cover";
                 avatar.style.backgroundPosition = "center";
             }
@@ -186,24 +227,34 @@ async function renderChatList(latestMessages = {}) {
         const nameElement = document.createElement("strong");
         nameElement.textContent = name;
 
+        const usernameElement = document.createElement("small");
+        usernameElement.textContent = username;
+
         const preview = document.createElement("p");
         preview.textContent = latest
             ? latest.content
             : "Start a Postcard 💌";
 
-        const usernameElement = document.createElement("small");
-        usernameElement.textContent = username;
+        details.append(
+            nameElement,
+            usernameElement,
+            preview
+        );
 
-        details.append(nameElement, usernameElement, preview);
         card.append(avatar, details);
 
-        card.addEventListener("click", () => openChat(mate));
+        card.addEventListener("click", () => {
+            openChat(mate);
+        });
 
         chatList.appendChild(card);
     }
 }
 
-// Open conversation
+// ============================================
+// OPEN CHAT
+// ============================================
+
 async function openChat(mate) {
     activeChat = mate;
 
@@ -218,19 +269,27 @@ async function openChat(mate) {
     chatStatus.textContent = "Mate";
 
     await loadMessages();
+
+    messageInput.focus();
 }
 
-// Load messages for selected Mate
-async function loadMessages() {
-    if (!activeChat) return;
+// ============================================
+// LOAD MESSAGES
+// ============================================
 
-    messageList.innerHTML = "<p>Loading Postcards...</p>";
+async function loadMessages() {
+    if (!activeChat || !currentUser) return;
+
+    messageList.innerHTML =
+        "<p class='empty-message'>Loading Postcards...</p>";
 
     const otherId = activeChat.id;
 
     const { data, error } = await supabaseClient
         .from("messages")
-        .select("id, sender_id, receiver_id, content, created_at")
+        .select(
+            "id, sender_id, receiver_id, content, created_at"
+        )
         .or(
             `and(sender_id.eq.${currentUser.id},receiver_id.eq.${otherId}),and(sender_id.eq.${otherId},receiver_id.eq.${currentUser.id})`
         )
@@ -238,14 +297,20 @@ async function loadMessages() {
 
     if (error) {
         console.error("Message loading error:", error);
-        messageList.innerHTML = "<p>Unable to load messages.</p>";
+
+        messageList.innerHTML =
+            "<p class='empty-message'>Unable to load messages.</p>";
+
         return;
     }
 
     renderMessages(data || []);
 }
 
-// Render conversation messages
+// ============================================
+// RENDER MESSAGES
+// ============================================
+
 function renderMessages(messages) {
     messageList.innerHTML = "";
 
@@ -256,7 +321,8 @@ function renderMessages(messages) {
     }
 
     messages.forEach(message => {
-        const messageElement = document.createElement("div");
+        const messageElement =
+            document.createElement("div");
 
         messageElement.className =
             message.sender_id === currentUser.id
@@ -270,11 +336,14 @@ function renderMessages(messages) {
         const time = document.createElement("small");
         time.className = "message-time";
 
-        time.textContent = new Date(message.created_at)
-            .toLocaleTimeString([], {
-                hour: "2-digit",
-                minute: "2-digit"
-            });
+        time.textContent =
+            new Date(message.created_at).toLocaleTimeString(
+                [],
+                {
+                    hour: "2-digit",
+                    minute: "2-digit"
+                }
+            );
 
         messageElement.append(bubble, time);
         messageList.appendChild(messageElement);
@@ -283,11 +352,17 @@ function renderMessages(messages) {
     messageList.scrollTop = messageList.scrollHeight;
 }
 
-// Send Postcard
+// ============================================
+// SEND POSTCARD
+// ============================================
+
 messageForm.addEventListener("submit", async function(event) {
     event.preventDefault();
 
-    if (!activeChat || !currentUser) return;
+    if (!activeChat || !currentUser) {
+        alert("Please open a Mate conversation.");
+        return;
+    }
 
     const content = messageInput.value.trim();
 
@@ -298,22 +373,41 @@ messageForm.addEventListener("submit", async function(event) {
         return;
     }
 
-    const sendButton = messageForm.querySelector("button");
-    sendButton.disabled = true;
+    if (activeChat.id === currentUser.id) {
+        alert("You cannot send a Postcard to yourself.");
+        return;
+    }
 
-    const { error } = await supabaseClient
+    const sendButton =
+        messageForm.querySelector("button");
+
+    sendButton.disabled = true;
+    sendButton.textContent = "Sending...";
+
+    const { data, error } = await supabaseClient
         .from("messages")
         .insert({
             sender_id: currentUser.id,
             receiver_id: activeChat.id,
             content: content
-        });
+        })
+        .select()
+        .single();
 
     sendButton.disabled = false;
+    sendButton.textContent = "Send";
 
     if (error) {
-        console.error("Send error:", error);
-        alert("Postcard could not be sent. Check your Mate connection.");
+        console.error("POSTCARD SEND ERROR:", error);
+
+        alert(
+            "Message Failed!\n\n" +
+            "Message: " + error.message + "\n\n" +
+            "Code: " + error.code + "\n\n" +
+            "Details: " + (error.details || "None") + "\n\n" +
+            "Hint: " + (error.hint || "None")
+        );
+
         return;
     }
 
@@ -321,9 +415,14 @@ messageForm.addEventListener("submit", async function(event) {
 
     await loadMessages();
     await loadInbox();
+
+    messageInput.focus();
 });
 
-// Back to inbox
+// ============================================
+// BACK TO INBOX
+// ============================================
+
 backButton.addEventListener("click", function() {
     activeChat = null;
 
@@ -333,12 +432,18 @@ backButton.addEventListener("click", function() {
     loadInbox();
 });
 
-// Search Mates
+// ============================================
+// SEARCH MATES
+// ============================================
+
 chatSearch.addEventListener("input", function() {
     loadInbox();
 });
 
-// Realtime messaging
+// ============================================
+// REALTIME MESSAGING
+// ============================================
+
 function startRealtime() {
     if (realtimeChannel) {
         supabaseClient.removeChannel(realtimeChannel);
@@ -355,8 +460,17 @@ function startRealtime() {
                 table: "messages",
                 filter: `receiver_id=eq.${currentUser.id}`
             },
-            async () => {
-                if (activeChat) await loadMessages();
+            async payload => {
+                if (
+                    activeChat &&
+                    (
+                        payload.new.sender_id === activeChat.id ||
+                        payload.new.receiver_id === activeChat.id
+                    )
+                ) {
+                    await loadMessages();
+                }
+
                 await loadInbox();
             }
         )
@@ -369,16 +483,30 @@ function startRealtime() {
                 table: "messages",
                 filter: `sender_id=eq.${currentUser.id}`
             },
-            async () => {
-                if (activeChat) await loadMessages();
+            async payload => {
+                if (
+                    activeChat &&
+                    (
+                        payload.new.sender_id === activeChat.id ||
+                        payload.new.receiver_id === activeChat.id
+                    )
+                ) {
+                    await loadMessages();
+                }
+
                 await loadInbox();
             }
         )
 
-        .subscribe();
+        .subscribe(status => {
+            console.log("Postcard Realtime Status:", status);
+        });
 }
 
-// Initialize Postcard
+// ============================================
+// INITIALIZE POSTCARD
+// ============================================
+
 async function initPostcard() {
     const loggedIn = await checkLogin();
 
@@ -388,12 +516,15 @@ async function initPostcard() {
 
     startRealtime();
 
-    // Open a Mate directly using ?user_id=
-    const params = new URLSearchParams(window.location.search);
+    const params =
+        new URLSearchParams(window.location.search);
+
     const userId = params.get("user_id");
 
     if (userId) {
-        const mate = allMates.find(item => item.id === userId);
+        const mate = allMates.find(
+            item => item.id === userId
+        );
 
         if (mate) {
             await openChat(mate);
