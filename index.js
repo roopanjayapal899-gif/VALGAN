@@ -303,6 +303,24 @@ async function loadFeed() {
 
             postCard.appendChild(header);
 
+
+            // POST DATE AND TIME
+const postDate = document.createElement("small");
+postDate.className = "volgan-post-date";
+
+postDate.textContent = new Date(
+    post.created_at
+).toLocaleString("en-IN", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true
+});
+
+postCard.appendChild(postDate);
+
             // ----------------------------------
             // POST TEXT
             // ----------------------------------
