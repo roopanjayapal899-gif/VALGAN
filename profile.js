@@ -16,6 +16,31 @@ const logoutButton = document.getElementById("logoutButton");
 
 let currentUser = null;
 
+// SYNC PROFILE DATA TO PROFILES TABLE
+
+async function syncProfileToTable() {
+    if (!currentUser) return;
+
+    const metadata = currentUser.user_metadata || {};
+
+    const { error } = await supabaseClient
+        .from("profiles")
+        .upsert({
+            id: currentUser.id,
+            username: metadata.username || "",
+            full_name: metadata.full_name || metadata.name || "VOLGAN User",
+            bio: metadata.bio || "",
+            avatar_path: metadata.avatar_path || null
+        }, {
+            onConflict: "id"
+        });
+
+    if (error) {
+        console.error("Profile sync error:", error);
+        throw error;
+    }
+}
+
 // Supabase Storage bucket name
 const AVATAR_BUCKET = "profile-images";
 
