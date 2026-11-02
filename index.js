@@ -546,3 +546,52 @@
   // Start after the HTML and Supabase scripts are ready.
   initializeHomePage();
 })();
+
+// VOLGAN NOTIFICATION SYSTEM
+
+const notificationButton = document.getElementById("notificationButton");
+const notificationCount = document.getElementById("notificationCount");
+
+async function loadNotificationCount() {
+    const { data: { user }, error: authError } =
+        await supabase.auth.getUser();
+
+    if (authError || !user) return;
+
+    const { count, error } = await supabase
+        .from("notifications")
+        .select("*", { count: "exact", head: true })
+        .eq("recipient_id", user.id)
+        .eq("is_read", false);
+
+    if (error) {
+        console.error("Notification error:", error.message);
+        return;
+    }
+
+    if (count > 0) {
+        notificationCount.textContent = count > 99 ? "99+" : count;
+        notificationCount.hidden = false;
+    } else {
+        notificationCount.hidden = true;
+    }
+}
+
+// Load notification count
+loadNotificationCount();
+
+// Realtime notification updates
+const notificationChannel = supabase
+    .channel("volgan-notifications")
+    .on(
+        "postgres_changes",
+        {
+            event: "INSERT",
+            schema: "public",
+            table: "notifications"
+        },
+        () => {
+            loadNotificationCount();
+        }
+    )
+    .subscribe();
