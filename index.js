@@ -803,7 +803,7 @@ loadRecentNotifications();
 
 // REALTIME PREVIEW UPDATE
 
-supabase
+supabaseClient.
     .channel("volgan-recent-preview")
     .on(
         "postgres_changes",
