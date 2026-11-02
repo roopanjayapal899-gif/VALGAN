@@ -547,273 +547,257 @@
   initializeHomePage();
 })();
 
-// VOLGAN NOTIFICATION SYSTEM
+// =====================================================
+// VOLGAN — NOTIFICATION SYSTEM
+// Uses the existing supabaseClient from supabase.js
+// =====================================================
 
-const notificationButton = document.getElementById("notificationButton");
-const notificationCount = document.getElementById("notificationCount");
+(() => {
+  "use strict";
 
-async function loadNotificationCount() {
-    const { data: { user }, error: authError } =
-        await supabase.auth.getUser();
+  const $ = (id) => document.getElementById(id);
 
-    if (authError || !user) return;
+  const notificationButton = $("notificationButton");
+  const notificationCount = $("notificationCount");
+  const notificationPanel = $("notificationPanel");
+  const notificationList = $("notificationList");
+  const closeNotifications = $("closeNotifications");
+  const recentNotificationList = $("recentNotificationList");
+  const viewAllNotifications = $("viewAllNotifications");
 
-    const { count, error } = await supabase
-        .from("notifications")
-        .select("*", { count: "exact", head: true })
-        .eq("recipient_id", user.id)
-        .eq("is_read", false);
+  let notificationUser = null;
+  let notificationChannel = null;
+
+  async function getCurrentUser() {
+    const { data, error } = await supabaseClient.auth.getUser();
 
     if (error) {
-        console.error("Notification error:", error.message);
-        return;
+      console.error("Notification authentication error:", error);
+      return null;
     }
 
-    if (count > 0) {
-        notificationCount.textContent = count > 99 ? "99+" : count;
-        notificationCount.hidden = false;
-    } else {
-        notificationCount.hidden = true;
-    }
-}
+    notificationUser = data.user;
+    return notificationUser;
+  }
 
-// Load notification count
-loadNotificationCount();
+  async function loadNotificationCount() {
+    if (!notificationCount) return;
 
-// Realtime notification updates
-const notificationChannel = supabase
-    .channel("volgan-notifications")
-    .on(
-        "postgres_changes",
-        {
-            event: "INSERT",
-            schema: "public",
-            table: "notifications"
-        },
-        () => {
-            loadNotificationCount();
-        }
-    )
-    .subscribe();
-
-// VOLGAN NOTIFICATION LIST
-
-const notificationPanel = document.getElementById("notificationPanel");
-const notificationList = document.getElementById("notificationList");
-const closeNotifications = document.getElementById("closeNotifications");
-
-async function loadNotifications() {
-
-    const { data: { user } } = await supabase.auth.getUser();
-
+    const user = notificationUser || await getCurrentUser();
     if (!user) return;
 
-    const { data, error } = await supabase
-        .from("notifications")
-        .select("id, sender_id, type, post_id, message, is_read, created_at")
-        .eq("recipient_id", user.id)
-        .order("created_at", { ascending: false })
-        .limit(30);
+    const { count, error } = await supabaseClient
+      .from("notifications")
+      .select("id", { count: "exact", head: true })
+      .eq("recipient_id", user.id)
+      .eq("is_read", false);
 
     if (error) {
-        console.error("Notification loading error:", error);
-        notificationList.textContent = "Unable to load notifications.";
-        return;
+      console.error("Notification count error:", error.message);
+      return;
     }
 
-    notificationList.innerHTML = "";
+    notificationCount.textContent =
+      count > 99 ? "99+" : String(count || 0);
+
+    notificationCount.hidden = !count;
+  }
+
+  async function loadNotifications() {
+    if (!notificationList) return;
+
+    const user = notificationUser || await getCurrentUser();
+    if (!user) return;
+
+    notificationList.textContent = "Loading notifications...";
+
+    const { data, error } = await supabaseClient
+      .from("notifications")
+      .select("id, sender_id, type, post_id, message, is_read, created_at")
+      .eq("recipient_id", user.id)
+      .order("created_at", { ascending: false })
+      .limit(30);
+
+    if (error) {
+      console.error("Notification loading error:", error);
+      notificationList.textContent = "Unable to load notifications.";
+      return;
+    }
+
+    notificationList.replaceChildren();
 
     if (!data || data.length === 0) {
-        notificationList.textContent = "No notifications yet.";
-        return;
+      notificationList.textContent = "No notifications yet.";
+      return;
     }
 
-    data.forEach(notification => {
+    data.forEach((notification) => {
+      const item = document.createElement("div");
+      item.className = "notification-item";
 
-        const item = document.createElement("div");
-        item.className = "notification-item";
+      const message = document.createElement("p");
+      message.textContent = notification.message || "New notification";
 
-        const message = document.createElement("p");
-        message.textContent = notification.message;
+      const time = document.createElement("small");
+      time.textContent = new Date(
+        notification.created_at
+      ).toLocaleString("en-IN");
 
-        const time = document.createElement("small");
-        time.textContent = new Date(
-            notification.created_at
-        ).toLocaleString();
+      item.append(message, time);
 
-        item.appendChild(message);
-        item.appendChild(time);
+      if (!notification.is_read) {
+        item.classList.add("unread");
 
-        if (!notification.is_read) {
-            item.classList.add("unread");
+        item.addEventListener("click", async () => {
+          const { error: updateError } = await supabaseClient
+            .from("notifications")
+            .update({ is_read: true })
+            .eq("id", notification.id)
+            .eq("recipient_id", user.id);
 
-            item.addEventListener("click", async () => {
+          if (updateError) {
+            console.error("Mark notification read error:", updateError);
+            return;
+          }
 
-                const { error } = await supabase
-                    .from("notifications")
-                    .update({ is_read: true })
-                    .eq("id", notification.id);
+          item.classList.remove("unread");
+          notification.is_read = true;
 
-                if (!error) {
-                    item.classList.remove("unread");
-                    loadNotificationCount();
-                }
-            });
-        }
+          await loadNotificationCount();
+          await loadRecentNotifications();
+        });
+      }
 
-        notificationList.appendChild(item);
+      notificationList.appendChild(item);
     });
-}
+  }
 
+  async function loadRecentNotifications() {
+    if (!recentNotificationList) return;
 
-// OPEN NOTIFICATION PANEL
+    const user = notificationUser || await getCurrentUser();
+    if (!user) return;
 
-notificationButton?.addEventListener("click", () => {
+    const { data, error } = await supabaseClient
+      .from("notifications")
+      .select("id, type, message, is_read, created_at")
+      .eq("recipient_id", user.id)
+      .order("created_at", { ascending: false })
+      .limit(3);
+
+    if (error) {
+      console.error("Recent notification error:", error);
+      recentNotificationList.textContent =
+        "Unable to load recent notifications.";
+      return;
+    }
+
+    recentNotificationList.replaceChildren();
+
+    if (!data || data.length === 0) {
+      recentNotificationList.textContent = "No new notifications";
+      return;
+    }
+
+    const icons = {
+      message: "💬",
+      comment: "🗨️",
+      share: "🔁"
+    };
+
+    data.forEach((notification) => {
+      const item = document.createElement("div");
+      item.className = "recent-notification-item";
+
+      const icon = document.createElement("span");
+      icon.textContent = icons[notification.type] || "🔔";
+
+      const content = document.createElement("div");
+
+      const message = document.createElement("p");
+      message.textContent = notification.message || "New notification";
+
+      const time = document.createElement("small");
+      time.textContent = new Date(
+        notification.created_at
+      ).toLocaleString("en-IN");
+
+      content.append(message, time);
+      item.append(icon, content);
+
+      if (!notification.is_read) {
+        item.classList.add("unread");
+      }
+
+      recentNotificationList.appendChild(item);
+    });
+  }
+
+  function connectNotificationRealtime() {
+    if (!notificationUser || notificationChannel) return;
+
+    notificationChannel = supabaseClient
+      .channel("volgan-notifications-" + notificationUser.id)
+      .on(
+        "postgres_changes",
+        {
+          event: "INSERT",
+          schema: "public",
+          table: "notifications",
+          filter: "recipient_id=eq." + notificationUser.id
+        },
+        async () => {
+          await loadNotificationCount();
+          await loadRecentNotifications();
+
+          if (notificationPanel && !notificationPanel.hidden) {
+            await loadNotifications();
+          }
+        }
+      )
+      .subscribe((status) => {
+        console.log("VOLGAN notification realtime:", status);
+      });
+  }
+
+  notificationButton?.addEventListener("click", async () => {
+    if (!notificationPanel) return;
 
     notificationPanel.hidden = !notificationPanel.hidden;
 
     if (!notificationPanel.hidden) {
-        loadNotifications();
+      await loadNotifications();
     }
+  });
 
-});
-
-
-// CLOSE NOTIFICATION PANEL
-
-closeNotifications?.addEventListener("click", () => {
-    notificationPanel.hidden = true;
-});
-
-
-// REALTIME LIST REFRESH
-
-supabaseClient
-    .channel("volgan-notification-list")
-    .on(
-        "postgres_changes",
-        {
-            event: "INSERT",
-            schema: "public",
-            table: "notifications"
-        },
-        () => {
-            loadNotificationCount();
-
-            if (!notificationPanel.hidden) {
-                loadNotifications();
-            }
-        }
-    )
-    .subscribe();
-
-
-// VOLGAN RECENT NOTIFICATION PREVIEW
-
-const recentNotificationList =
-    document.getElementById("recentNotificationList");
-
-const viewAllNotifications =
-    document.getElementById("viewAllNotifications");
-
-
-async function loadRecentNotifications() {
-
-    const { data: { user }, error: authError } =
-        await supabase.auth.getUser();
-
-    if (authError || !user) return;
-
-    const { data, error } = await supabase
-        .from("notifications")
-        .select("id, type, message, is_read, created_at")
-        .eq("recipient_id", user.id)
-        .order("created_at", { ascending: false })
-        .limit(3);
-
-    if (error) {
-        console.error("Recent notification error:", error);
-        return;
+  closeNotifications?.addEventListener("click", () => {
+    if (notificationPanel) {
+      notificationPanel.hidden = true;
     }
+  });
 
-    recentNotificationList.innerHTML = "";
-
-    if (!data || data.length === 0) {
-        recentNotificationList.textContent =
-            "No new notifications";
-        return;
-    }
-
-    data.forEach(notification => {
-
-        const item = document.createElement("div");
-        item.className = "recent-notification-item";
-
-        const icon = document.createElement("span");
-
-        const icons = {
-            message: "💬",
-            comment: "🗨️",
-            share: "🔁"
-        };
-
-        icon.textContent = icons[notification.type] || "🔔";
-
-        const content = document.createElement("div");
-
-        const message = document.createElement("p");
-        message.textContent = notification.message;
-
-        const time = document.createElement("small");
-        time.textContent = new Date(
-            notification.created_at
-        ).toLocaleString();
-
-        content.appendChild(message);
-        content.appendChild(time);
-
-        item.appendChild(icon);
-        item.appendChild(content);
-
-        if (!notification.is_read) {
-            item.classList.add("unread");
-        }
-
-        recentNotificationList.appendChild(item);
-
-    });
-}
-
-
-// VIEW ALL NOTIFICATIONS
-
-viewAllNotifications?.addEventListener("click", () => {
+  viewAllNotifications?.addEventListener("click", async () => {
+    if (!notificationPanel) return;
 
     notificationPanel.hidden = false;
+    await loadNotifications();
+  });
 
-    loadNotifications();
+  async function initializeNotifications() {
+    try {
+      const user = await getCurrentUser();
+      if (!user) return;
 
-});
+      await Promise.all([
+        loadNotificationCount(),
+        loadRecentNotifications()
+      ]);
 
+      connectNotificationRealtime();
+    } catch (error) {
+      console.error("VOLGAN notification initialization error:", error);
+    }
+  }
 
-// INITIAL LOAD
-
-loadRecentNotifications();
-
-
-// REALTIME PREVIEW UPDATE
-
-supabaseClient.
-    .channel("volgan-recent-preview")
-    .on(
-        "postgres_changes",
-        {
-            event: "INSERT",
-            schema: "public",
-            table: "notifications"
-        },
-        () => {
-            loadRecentNotifications();
-        }
-    )
-    .subscribe();
+  initializeNotifications();
+})();
