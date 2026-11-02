@@ -595,3 +595,114 @@ const notificationChannel = supabase
         }
     )
     .subscribe();
+
+// VOLGAN NOTIFICATION LIST
+
+const notificationPanel = document.getElementById("notificationPanel");
+const notificationList = document.getElementById("notificationList");
+const closeNotifications = document.getElementById("closeNotifications");
+
+async function loadNotifications() {
+
+    const { data: { user } } = await supabase.auth.getUser();
+
+    if (!user) return;
+
+    const { data, error } = await supabase
+        .from("notifications")
+        .select("id, sender_id, type, post_id, message, is_read, created_at")
+        .eq("recipient_id", user.id)
+        .order("created_at", { ascending: false })
+        .limit(30);
+
+    if (error) {
+        console.error("Notification loading error:", error);
+        notificationList.textContent = "Unable to load notifications.";
+        return;
+    }
+
+    notificationList.innerHTML = "";
+
+    if (!data || data.length === 0) {
+        notificationList.textContent = "No notifications yet.";
+        return;
+    }
+
+    data.forEach(notification => {
+
+        const item = document.createElement("div");
+        item.className = "notification-item";
+
+        const message = document.createElement("p");
+        message.textContent = notification.message;
+
+        const time = document.createElement("small");
+        time.textContent = new Date(
+            notification.created_at
+        ).toLocaleString();
+
+        item.appendChild(message);
+        item.appendChild(time);
+
+        if (!notification.is_read) {
+            item.classList.add("unread");
+
+            item.addEventListener("click", async () => {
+
+                const { error } = await supabase
+                    .from("notifications")
+                    .update({ is_read: true })
+                    .eq("id", notification.id);
+
+                if (!error) {
+                    item.classList.remove("unread");
+                    loadNotificationCount();
+                }
+            });
+        }
+
+        notificationList.appendChild(item);
+    });
+}
+
+
+// OPEN NOTIFICATION PANEL
+
+notificationButton.addEventListener("click", () => {
+
+    notificationPanel.hidden = !notificationPanel.hidden;
+
+    if (!notificationPanel.hidden) {
+        loadNotifications();
+    }
+
+});
+
+
+// CLOSE NOTIFICATION PANEL
+
+closeNotifications.addEventListener("click", () => {
+    notificationPanel.hidden = true;
+});
+
+
+// REALTIME LIST REFRESH
+
+supabase
+    .channel("volgan-notification-list")
+    .on(
+        "postgres_changes",
+        {
+            event: "INSERT",
+            schema: "public",
+            table: "notifications"
+        },
+        () => {
+            loadNotificationCount();
+
+            if (!notificationPanel.hidden) {
+                loadNotifications();
+            }
+        }
+    )
+    .subscribe();
