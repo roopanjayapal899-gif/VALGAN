@@ -404,3 +404,51 @@ body {
 .notification-count[hidden] {
     display: none;
     }
+
+/* NOTIFICATION PANEL */
+
+.notification-panel {
+    position: absolute;
+    top: 65px;
+    right: 15px;
+    width: min(350px, calc(100vw - 30px));
+    max-height: 450px;
+    overflow-y: auto;
+    background: #ffffff;
+    border: 1px solid #e6edf5;
+    border-radius: 14px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+    z-index: 1000;
+    padding: 16px;
+}
+
+.notification-panel[hidden] {
+    display: none;
+}
+
+.notification-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 14px;
+    border-bottom: 1px solid #edf1f5;
+}
+
+.notification-header h3 {
+    font-size: 17px;
+    color: #172b4d;
+}
+
+.notification-header button {
+    border: none;
+    background: transparent;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.notification-empty {
+    text-align: center;
+    padding: 30px 10px;
+    color: #8190a5;
+    font-size: 14px;
+    }
