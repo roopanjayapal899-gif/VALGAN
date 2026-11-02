@@ -707,61 +707,6 @@ supabase
     )
     .subscribe();
 
-/* RECENT NOTIFICATIONS */
-
-.recent-notifications {
-    background: #ffffff;
-    border: 1px solid #e6edf5;
-    border-radius: 15px;
-    padding: 16px;
-    margin: 15px 0 20px;
-}
-
-.recent-notifications-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 12px;
-}
-
-.recent-notifications-header h3 {
-    font-size: 16px;
-    color: #172b4d;
-}
-
-#viewAllNotifications {
-    border: none;
-    background: transparent;
-    color: #168de0;
-    font-weight: 600;
-    cursor: pointer;
-}
-
-.recent-notification-item {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 12px 0;
-    border-top: 1px solid #edf3f8;
-}
-
-.recent-notification-item p {
-    font-size: 14px;
-    color: #172b4d;
-}
-
-.recent-notification-item small {
-    display: block;
-    margin-top: 4px;
-    color: #8190a5;
-}
-
-.notification-empty {
-    text-align: center;
-    color: #8190a5;
-    padding: 18px 5px;
-    font-size: 13px;
-   }
 
 // VOLGAN RECENT NOTIFICATION PREVIEW
 
