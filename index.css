@@ -372,3 +372,35 @@ body {
     margin-top: 10px;
     object-fit: contain;
 }
+
+/* NOTIFICATION BUTTON */
+
+.notification-button {
+    position: relative;
+    background: transparent;
+    border: none;
+    font-size: 22px;
+    cursor: pointer;
+    padding: 8px;
+    color: #172b4d;
+}
+
+.notification-count {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: #e53935;
+    color: white;
+    font-size: 10px;
+    font-weight: 700;
+    min-width: 17px;
+    height: 17px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.notification-count[hidden] {
+    display: none;
+    }
