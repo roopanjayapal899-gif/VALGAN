@@ -668,7 +668,7 @@ async function loadNotifications() {
 
 // OPEN NOTIFICATION PANEL
 
-notificationButton.addEventListener("click", () => {
+notificationButton?.addEventListener("click", () => {
 
     notificationPanel.hidden = !notificationPanel.hidden;
 
@@ -681,14 +681,14 @@ notificationButton.addEventListener("click", () => {
 
 // CLOSE NOTIFICATION PANEL
 
-closeNotifications.addEventListener("click", () => {
+closeNotifications?.addEventListener("click", () => {
     notificationPanel.hidden = true;
 });
 
 
 // REALTIME LIST REFRESH
 
-supabase
+supabaseClient
     .channel("volgan-notification-list")
     .on(
         "postgres_changes",
@@ -787,7 +787,7 @@ async function loadRecentNotifications() {
 
 // VIEW ALL NOTIFICATIONS
 
-viewAllNotifications.addEventListener("click", () => {
+viewAllNotifications?.addEventListener("click", () => {
 
     notificationPanel.hidden = false;
 
