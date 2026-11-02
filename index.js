@@ -762,3 +762,113 @@ supabase
     padding: 18px 5px;
     font-size: 13px;
    }
+
+// VOLGAN RECENT NOTIFICATION PREVIEW
+
+const recentNotificationList =
+    document.getElementById("recentNotificationList");
+
+const viewAllNotifications =
+    document.getElementById("viewAllNotifications");
+
+
+async function loadRecentNotifications() {
+
+    const { data: { user }, error: authError } =
+        await supabase.auth.getUser();
+
+    if (authError || !user) return;
+
+    const { data, error } = await supabase
+        .from("notifications")
+        .select("id, type, message, is_read, created_at")
+        .eq("recipient_id", user.id)
+        .order("created_at", { ascending: false })
+        .limit(3);
+
+    if (error) {
+        console.error("Recent notification error:", error);
+        return;
+    }
+
+    recentNotificationList.innerHTML = "";
+
+    if (!data || data.length === 0) {
+        recentNotificationList.textContent =
+            "No new notifications";
+        return;
+    }
+
+    data.forEach(notification => {
+
+        const item = document.createElement("div");
+        item.className = "recent-notification-item";
+
+        const icon = document.createElement("span");
+
+        const icons = {
+            message: "💬",
+            comment: "🗨️",
+            share: "🔁"
+        };
+
+        icon.textContent = icons[notification.type] || "🔔";
+
+        const content = document.createElement("div");
+
+        const message = document.createElement("p");
+        message.textContent = notification.message;
+
+        const time = document.createElement("small");
+        time.textContent = new Date(
+            notification.created_at
+        ).toLocaleString();
+
+        content.appendChild(message);
+        content.appendChild(time);
+
+        item.appendChild(icon);
+        item.appendChild(content);
+
+        if (!notification.is_read) {
+            item.classList.add("unread");
+        }
+
+        recentNotificationList.appendChild(item);
+
+    });
+}
+
+
+// VIEW ALL NOTIFICATIONS
+
+viewAllNotifications.addEventListener("click", () => {
+
+    notificationPanel.hidden = false;
+
+    loadNotifications();
+
+});
+
+
+// INITIAL LOAD
+
+loadRecentNotifications();
+
+
+// REALTIME PREVIEW UPDATE
+
+supabase
+    .channel("volgan-recent-preview")
+    .on(
+        "postgres_changes",
+        {
+            event: "INSERT",
+            schema: "public",
+            table: "notifications"
+        },
+        () => {
+            loadRecentNotifications();
+        }
+    )
+    .subscribe();
